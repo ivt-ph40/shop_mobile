@@ -7,6 +7,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use App\Category;
+use App\Brand;
+use App\Province;
+use App\District;
+use App\Ward;
 
 class RegisterController extends Controller
 {
@@ -68,5 +73,22 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+    }
+    public function showRegistrationForm()
+    {
+        $provinces = Province::all();
+        $districts = District::all();
+        $wards = Ward::all();
+        $listCategory = Category::where('status', 1)->get();
+        $listBrand = Brand::where('status', 1)->get();
+        return view('users.register', compact('listCategory', 'listBrand', 'provinces', 'districts', 'wards'));
+    }
+    public function showDistrict(Request $request)
+    {
+        if($request->ajax()){
+            $districts = District::where('province_id', $request->province_id)->select('id', 'name');
+            // dd($districts);
+            return response()->json($districts);
+        }
     }
 }

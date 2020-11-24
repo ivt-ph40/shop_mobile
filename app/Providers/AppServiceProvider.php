@@ -23,6 +23,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        // Schema::defaultStringLength(191);
+        // $categories = Category::all();
+        // View::share('category', $categories);
+        // $parentcategories = Category::where('parent_id', 0)->get();
+        // View::share('parentcategory', $parentcategories);
     }
 }

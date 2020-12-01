@@ -18,7 +18,7 @@ class CreateOrdersTable extends Migration
             $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('fullname');
-            $table->string('email')->unique();
+            $table->string('email');
             $table->string('street');
             $table->unsignedBigInteger('province_id');
             $table->foreign('province_id')->references('id')->on('provinces')->onDelete('cascade');

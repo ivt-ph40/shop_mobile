@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-
+use Illuminate\Http\Request;
+use App\User;
+use Session;
+session_start();
 class LoginController extends Controller
 {
     /*
@@ -42,15 +45,21 @@ class LoginController extends Controller
     }
     public function login(Request $request)
     {
-        $data = $request->only('email', 'password');
-        if (\Auth::attempt($data)) {
+        $email = $request->email;
+        $password = md5($request->password);
+        // dd($data);
+        $result = User::where('email', $email)->where('password', $password)->first();
+        if ($result) {
+            Session::put('name', $result ->name);
+            Session::put('id', $result ->id);
             return Redirect()->route('home.index');
         }
-        return Redirect()->back()->with('message', 'Email or password wrong. Please try again!')->withInput();
+        return Redirect()->back()->with('message', 'Mật khẩu hoặc tài khoản không đúng!')->withInput();
     }
     public function logout(Request $request)
     {
-        auth()->logout();
-        return Redirect()->route('login.showLoginForm');
+        Session::put('name', null);
+        Session::put('id', null);
+        return Redirect()->route('users.showLoginForm');
     }
 }

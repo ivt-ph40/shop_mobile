@@ -48,12 +48,12 @@
                     <p style="color:blue">{{ $errors->first('brand_id') }}</p>
                     <div class="form-group">
                         <label for="exampleInputDesc">Mô tả sản phẩm</label>
-                        <textarea style="resize: none" rows="5" name="description"  class="form-control" id="exampleInputDesc" placeholder="Mô tả sản phẩm"></textarea>
+                        <textarea style="resize: none" rows="5" name="description"  class="form-control" id="ckeditor1" placeholder="Mô tả sản phẩm"></textarea>
                     </div>
                     <p style="color:blue">{{ $errors->first('description') }}</p>
                     <div class="form-group">
                         <label for="exampleInputDesc">Nội dung sản phẩm</label>
-                        <textarea style="resize: none" rows="5" name="content"  class="form-control" id="exampleInputDesc" placeholder="Nội dung sản phẩm"></textarea>
+                        <textarea style="resize: none" rows="5" name="content"  class="form-control" id="ckeditor2" placeholder="Nội dung sản phẩm"></textarea>
                     </div>
                     <p style="color:blue">{{ $errors->first('content') }}</p>
                     <div class="form-group">

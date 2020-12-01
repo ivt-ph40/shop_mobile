@@ -95,6 +95,7 @@ class CategoryController extends Controller
         $this->AuthLogin();
         $data =array();
         $data['name']   = $request ->name;
+        $data['slug']   = $request ->slug;
         $data['description']   = $request ->description;
         $data['parent_id']   = $request ->parent_id;
         Category::where('id', $id)->update($data);
@@ -107,6 +108,7 @@ class CategoryController extends Controller
         $listCategory = Category::where('status', 1)->get();
         $listBrand = Brand::where('status', 1)->get();
         $category_by_id = Category::with('products')->where('id', $id)->first();
+        // dd($category_by_id->toArray());
         // $aa = Category::with('subcategory')->where('id', $id)->first();
         // dd($category_by_id->toArray());
         return view('pages.show_category')->with('listCategory', $listCategory)->with('listBrand', $listBrand)->with('category_by_id', $category_by_id);

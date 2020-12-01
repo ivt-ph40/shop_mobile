@@ -660,7 +660,7 @@ ul.sub-menu {
   padding-top: 15px;
 }
 .left-sidebar h2, .brands_products h2 {
-  color: #FE980F;
+  color: #3f0ffe;
   font-family: 'Roboto', sans-serif;
   font-size: 18px;
   font-weight: 700;
@@ -835,7 +835,7 @@ h2.title:before{
 
 
 h2.title {
-  color: #FE980F;
+  color: #3f0ffe;
   font-family: 'Roboto', sans-serif;
   font-size: 18px;
   font-weight: 700;
@@ -942,13 +942,13 @@ h2.title {
 
 
 .add-to-cart {
-  background:#F5F5ED;
+  background:#ff6666;
   border: 0 none;
   border-radius: 0;
   color: #696763;
   font-family: 'Roboto', sans-serif;
   font-size: 15px;
-  margin-bottom: 25px;
+  margin-bottom: 6px;
 }
 
 .add-to-cart:hover {
@@ -1360,8 +1360,9 @@ h2.title {
 
 #reviews textarea {
   background: #F0F0E9;
-  border: medium none;
-  color: #A6A6A1;
+  border: 1px solid #428bca;
+  border-radius: 10px;
+  color: #000000;
   height: 195px;
   margin-bottom: 25px;
   margin-top: 15px;
@@ -2551,5 +2552,4 @@ h2.title {
   #form_register select1{
     margin-bottom: 20px;
   }
-
 

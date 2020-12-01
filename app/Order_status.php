@@ -10,4 +10,8 @@ class Order_status extends Model
     protected $fillable = [
     	'name'
     ];
+    public function orders()
+    {
+    	return $this->hasMany('App\Order', 'status_id', 'id');
+    }
 }

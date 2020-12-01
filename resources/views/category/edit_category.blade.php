@@ -20,6 +20,13 @@
                         <p style="color:blue">{{ $errors->first('name') }}</p>
                     @endif
                     <div class="form-group">
+                        <label for="exampleInputSlug">Tên danh mục</label>
+                        <input type="text" name="slug" class="form-control" id="exampleInputSlug" placeholder="Tên slug" value="{{ $edit_category->slug }}">
+                    </div>
+                    @if ($errors->has('slug'))
+                        <p style="color:blue">{{ $errors->first('name') }}</p>
+                    @endif
+                    <div class="form-group">
                         <label for="exampleInputDesc">Mô tả danh mục</label>
                         <textarea style="resize: none" rows="10" name="description"  class="form-control" id="exampleInputDesc" placeholder="Mô tả danh mục" value="{{ $edit_category->description }}">{{ $edit_category->description }}</textarea>
                     </div>

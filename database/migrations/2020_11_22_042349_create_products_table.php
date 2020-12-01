@@ -23,6 +23,7 @@ class CreateProductsTable extends Migration
             $table->text('description');
             $table->text('content');
             $table->integer('quantity');
+            $table->integer('sold')->default(0);
             $table->string('image');
             $table->float('price');
             $table->boolean('status');

@@ -10,4 +10,8 @@ class District extends Model
     protected $fillable = [
     	'name', 'province_id'
     ];
+    public function orders()
+    {
+    	return $this->hasMany('App\Order');
+    }
 }

@@ -1,5 +1,34 @@
 @extends('layout')
 @section('content')
+<style>
+	#reviews form span input:last-child {
+	    margin-left: 0%;
+	    border: 1px solid #428bca;
+	    border-radius: 10px;
+	    color: #000000;
+	}
+	#reviews textarea {
+	    background: #F0F0E9;
+	    border: 1px solid #428bca;
+	    border-radius: 10px;
+	    color: #000000;
+	    height: 100px;
+	    margin-bottom: 25px;
+	    margin-top: 15px;
+	    outline: medium none;
+	    padding-left: 10px;
+	    padding-top: 15px;
+	    resize: none;
+	    width: 99.5%;
+	}
+	.add-to-cart {
+		background:#ff6666;
+		margin-bottom: 6px;
+	}
+	h2.title {
+		color: #3f0ffe;
+	}
+</style>
 {{-- @foreach ($listProductDetail as $productDetail) --}}
 	<div class="product-details"><!--product-details-->
 		<div class="col-sm-5">
@@ -39,7 +68,7 @@
 						<input type="hidden" name="product_image" class="product_image" value="{{$listProductDetail->image}}">
 						<button type="button" name="add-to-cart" class="btn btn-fefault add-to-cart" data-id = "{{$listProductDetail->id}}">
 							<i class="fa fa-shopping-cart"></i>
-							Add to cart
+							Thêm vào giỏ
 						</button>
 					</span>
 				</form>
@@ -58,13 +87,13 @@
 	<div class="category-tab shop-details-tab"><!--category-tab-->
 		<div class="col-sm-12">
 			<ul class="nav nav-tabs">
-				<li  class="active"><a href="#details" data-toggle="tab">Thông tin chi tiết</a></li>
+				<li><a href="#details" data-toggle="tab">Thông tin chi tiết</a></li>
 				<li><a href="#companyprofile" data-toggle="tab">Mô tả</a></li>
-				<li><a href="#reviews" data-toggle="tab">Đánh giá</a></li>
+				<li class="active"><a href="#reviews" data-toggle="tab">Đánh giá</a></li>
 			</ul>
 		</div>
 		<div class="tab-content">
-			<div class="tab-pane fade active in" id="details" >
+			<div class="tab-pane " id="details" >
 				<div class="col-sm-3">
 					<div class="product-image-wrapper">
 						<div class="single-products">
@@ -90,25 +119,43 @@
 				</div>
 				
 			</div>
-			<div class="tab-pane fade " id="reviews" >
+			<div class="tab-pane fade fade active in" id="reviews" >
 				<div class="col-sm-12">
 					<ul>
-						<li><a href=""><i class="fa fa-user"></i>EUGEN</a></li>
-						<li><a href=""><i class="fa fa-clock-o"></i>12:41 PM</a></li>
-						<li><a href=""><i class="fa fa-calendar-o"></i>31 DEC 2014</a></li>
+						<li><a href=""><i class="fa fa-user"></i>haupham</a></li>
+						<li><a href=""><i class="fa fa-clock-o"></i>16:09 PM</a></li>
+						<li><a href=""><i class="fa fa-calendar-o"></i>19 SEP 1993</a></li>
 					</ul>
-					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-					<p><b>Write Your Review</b></p>
+					<form action="" method="post">
+						@csrf
+						<input type="hidden" name="com_product_id" id="inputProduct_id" class="com_product_id" value="{{$listProductDetail->id}}">
+						<div id="show_comment"></div>
+						{{-- <div class="comment">
+							<div class="col-md-2">
+								<img style="width: 60px" src="{{asset('frontend/images/icon_person.png')}}" class="img-responsive img-thumbnail" alt="">
+							</div>
+
+							<div class="col-md-10">
+								<p style="color:blue">@haupham</p>
+								<p>Video này mình hướng dẫn các bạn comment bằng ajax nhé .Nhớ subs kênh để theo dõi video hướng dẫn lập trình website nhé.</p>
+							</div>
+						</div><p></p> --}}
+					</form>
 					
-					<form action="#">
+					<p><b>Viết đánh giá</b></p>
+					
+					<form action="#" method="post">
+						@csrf
+						<div class="notify"></div>
 						<span>
-							<input type="text" placeholder="Your Name"/>
-							<input type="email" placeholder="Email Address"/>
+							<input type="text" placeholder="Nhập tên" class="comment_name" />
+							{{-- <input type="email" placeholder="Email Address"/> --}}
 						</span>
-						<textarea name="" ></textarea>
-						<b>Rating: </b> <img src="images/product-details/rating.png" alt="" />
-						<button type="button" class="btn btn-default pull-right">
-							Submit
+						<textarea name="comment_content" class="comment_content" placeholder="Nội dung bình luận"></textarea>
+
+						<b>Đánh giá: </b> <img src="images/product-details/rating.png" alt="" />
+						<button type="button" class="btn btn-default pull-right add_comment">
+							Gửi
 						</button>
 					</form>
 				</div>

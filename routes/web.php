@@ -131,6 +131,13 @@ Route::post('/update/image_name', 'ImageController@update')->name('image.update'
 Route::post('/delete_image', 'ImageController@destroy')->name('image.destroy');
 Route::post('/update_image', 'ImageController@update_image')->name('image.update_image');
 
+//COMMENT
+//load comment
+Route::post('/load_comment', 'ProductController@load_comment')->name('comment.load_comment');
+//add comment
+Route::post('/add_comment', 'ProductController@add_comment')->name('comment.add_comment');
+
+
 
 
 //send mail

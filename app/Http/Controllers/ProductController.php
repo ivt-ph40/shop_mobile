@@ -9,6 +9,7 @@ use App\Brand;
 use App\Image;
 use App\Category;
 use Session;
+use App\Comment;
 use Cart;
 use File;
 session_start();
@@ -173,5 +174,41 @@ class ProductController extends Controller
         }*/
 
         return view('product.product_detail')->with('listCategory', $listCategory)->with('listBrand', $listBrand)->with('listProductDetail', $listProductDetail)->with('relate', $relate)->with('images', $images);
+    }
+    public function load_comment(Request $request)
+    {
+        $output = '';
+        $product_id = $request->product_id;
+        $comments = Comment::where('product_id', $product_id)->get();
+        // dd($comments);
+        foreach ($comments as $key => $comm) {
+            $output .= '<div class="comment">
+                            <div class="col-md-2">
+                                <img style="width: 60px" src="'.url('frontend/images/icon_person.png').'" class="img-responsive img-thumbnail" alt="">
+                            </div>
+                            <div class="col-md-10">
+                                <p style="color:blue">@'.$comm->fullname.'</p>
+                                <p>'.$comm->content.'</p>
+                            </div>
+                        </div><p></p>';
+        }
+        echo $output;
+    }
+    public function add_comment(Request $request)
+    {
+        $user_id = Session::get('userId');
+        if ($user_id) {
+            $data['user_id'] = $user_id;
+            $data['product_id'] = $request->product_id;
+            $data['fullname'] = $request->comment_name;
+            $data['content'] = $request->comment_content;
+            Comment::create($data);
+        } else{
+            $data['user_id'] = null;
+            $data['product_id'] = $request->product_id;
+            $data['fullname'] = $request->comment_name;
+            $data['content'] = $request->comment_content;
+            Comment::create($data);
+        }
     }
 }

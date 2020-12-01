@@ -1,9 +1,14 @@
 @extends('layout')
 @section('content')
+<style>
+    h2.title {
+        color: #3f0ffe;
+    }
+</style>
 <div class="features_items"><!--features_items-->
     <div class="fb-share-button" data-href="http://mobileshop.com/" data-layout="button_count" data-size="large"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fmobileshop.com%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Chia sẻ</a></div>
     <div class="fb-like" data-href="http://mobileshop.com/" data-width="" data-layout="standard" data-action="like" data-size="large" data-share="false"></div>
-    <h2 class="title text-center">Features Items</h2>
+    <h2 class="title text-center">Sản phẩm Mobile-Shop</h2>
     @foreach ($listProduct as $products)
         <div class="col-sm-4">
             <div class="product-image-wrapper"> 
@@ -33,7 +38,7 @@
     @endforeach 
 </div><!--features_items-->
 
-<div class="recommended_items"><!--recommended_items-->
+{{-- <div class="recommended_items"><!--recommended_items-->
     <h2 class="title text-center">recommended items</h2>
     
     <div id="recommended-item-carousel" class="carousel slide" data-ride="carousel">
@@ -134,6 +139,6 @@
     data-width="380" 
     data-hide-cover="false"
     data-show-facepile="false"></div>
-</div><!--/recommended_items-->
-
+</div><!--/recommended_items--> --}}
+{{$listProduct->links()}}
 @endsection

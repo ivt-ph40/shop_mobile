@@ -40,6 +40,9 @@
             height: 25px;
             border-radius: 50%;
         }
+        .left-sidebar h2, .brands_products h2 {
+            color: #3f0ffe;
+        }
     </style>
 </head><!--/head-->
 
@@ -118,7 +121,7 @@
                                 @if (Session::get('id') != null)
                                     <li class="dropdown">
                                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                                            <img alt="" id="img_hau" src="{{ ('backend/images/hau.png') }}">
+                                            <img alt="" id="img_hau" src="{{ asset('backend/images/hau.png') }}">
                                             <span class="username">
                                                 @if (Session::get('name'))
                                                     {{Session::get('name')}}
@@ -208,39 +211,39 @@
                         
                         <div class="carousel-inner">
                             <div class="item active">
-                                <div class="col-sm-6">
+                                {{-- <div class="col-sm-6">
                                     <h1><span>Mobile</span>-CITY</h1>
                                     <h2>Thỏa sức kết nối cùng đam mê</h2>
                                     <h4>Giá cả siêu sẽ, siêu bất ngờ!</h4>
                                     <button type="button" class="btn btn-default get">Đi thôi!</button>
-                                </div>
-                                <div class="col-sm-6">
-                                    <img src="{{asset('frontend/images/slide1.jpg')}}" class="girl img-responsive" alt="" />
+                                </div> --}}
+                                <div class="col-sm-12">
+                                    <img src="{{asset('frontend/images/quangcao2.jpg')}}" class="girl img-responsive" alt="" />
                                     {{-- <img src="{{('frontend/images/bigsale.png')}}"  class="pricing" alt="" /> --}}
                                 </div>
                             </div>
                             <div class="item">
-                                <div class="col-sm-6">
+                                {{-- <div class="col-sm-6">
                                     <h1><span>Mobile</span>-CITY</h1>
                                     <h2>100% Hàng chính hãng</h2>
                                     <h4>Mua sắm thả ga không lo về giá!</h4>
                                     <button type="button" class="btn btn-default get">Đi thôi!</button>
-                                </div>
-                                <div class="col-sm-6">
-                                    <img src="{{asset('frontend/images/slide2.jpg')}}" class="girl img-responsive" alt="" />
+                                </div> --}}
+                                <div class="col-sm-12">
+                                    <img src="{{asset('frontend/images/quangcao3.jpg')}}" class="girl img-responsive" alt="" />
                                     {{-- <img src="{{('frontend/images/bigsale.png')}}"  class="pricing" alt="" /> --}}
                                 </div>
                             </div>
                             
                             <div class="item">
-                                <div class="col-sm-6">
+                                {{-- <div class="col-sm-6">
                                     <h1><span>Mobile</span>-CITY</h1>
                                     <h2>Mau đi nào!</h2>
                                     <h4>Hãy đến ngay với chúng tôi. Bạn còn chần chờ gì nữa!</h4>
                                     <button type="button" class="btn btn-default get">Đi thôi!</button>
-                                </div>
-                                <div class="col-sm-6">
-                                    <img src="{{asset('frontend/images/slide3.jpg')}}" class="girl img-responsive" alt="" />
+                                </div> --}}
+                                <div class="col-sm-12">
+                                    <img src="{{asset('frontend/images/quangcao4.jpg')}}" class="girl img-responsive" alt="" />
                                     {{-- <img src="{{('frontend/images/bigsale.png')}}" class="pricing" alt="" /> --}}
                                 </div>
                             </div>
@@ -304,7 +307,7 @@
                             <div class="brands-name">
                                 @foreach ($listBrand as $brand)
                                 <ul class="nav nav-pills nav-stacked">
-                                    <li><a href="{{ URL::to('brand/statusby/'.$brand->id) }}"> <span class="pull-right">({{50}})</span>{{$brand->name}}</a></li>
+                                    <li><a href="{{ URL::to('brand/statusby/'.$brand->id) }}"> <span class="pull-right"></span>{{$brand->name}}</a></li>
                                 </ul>
                                 @endforeach
                             </div>
@@ -348,14 +351,14 @@
                             <div class="video-gallery text-center">
                                 <a href="#">
                                     <div class="iframe-img">
-                                        <img src="{{asset('frontend/images/iframe1.png')}}" alt="" />
+                                        <img src="{{asset('frontend/images/laptopdell.jpg')}}" alt="" />
                                     </div>
                                     <div class="overlay-icon">
                                         <i class="fa fa-play-circle-o"></i>
                                     </div>
                                 </a>
-                                <p>Circle of Hands</p>
-                                <h2>24 DEC 2014</h2>
+                                <p>Brand Dell</p>
+                                <h2>24 DEC 2020</h2>
                             </div>
                         </div>
                         
@@ -363,14 +366,14 @@
                             <div class="video-gallery text-center">
                                 <a href="#">
                                     <div class="iframe-img">
-                                        <img src="{{asset('frontend/images/iframe2.png')}}" alt="" />
+                                        <img src="{{asset('frontend/images/macbook2.jpg')}}" alt="" />
                                     </div>
                                     <div class="overlay-icon">
                                         <i class="fa fa-play-circle-o"></i>
                                     </div>
                                 </a>
-                                <p>Circle of Hands</p>
-                                <h2>24 DEC 2014</h2>
+                                <p>Brand Apple</p>
+                                <h2>24 DEC 2020</h2>
                             </div>
                         </div>
                         
@@ -378,14 +381,14 @@
                             <div class="video-gallery text-center">
                                 <a href="#">
                                     <div class="iframe-img">
-                                        <img src="{{asset('frontend/images/iframe3.png')}}" alt="" />
+                                        <img src="{{asset('frontend/images/huawei1.jpg')}}" alt="" />
                                     </div>
                                     <div class="overlay-icon">
                                         <i class="fa fa-play-circle-o"></i>
                                     </div>
                                 </a>
-                                <p>Circle of Hands</p>
-                                <h2>24 DEC 2014</h2>
+                                <p>Brand Huawei</p>
+                                <h2>24 DEC 2020</h2>
                             </div>
                         </div>
                         
@@ -393,13 +396,13 @@
                             <div class="video-gallery text-center">
                                 <a href="#">
                                     <div class="iframe-img">
-                                        <img src="{{asset('frontend/images/iframe4.png')}}" alt="" />
+                                        <img src="{{asset('frontend/images/galaxy3.jpg')}}" alt="" />
                                     </div>
                                     <div class="overlay-icon">
                                         <i class="fa fa-play-circle-o"></i>
                                     </div>
                                 </a>
-                                <p>Circle of Hands</p>
+                                <p>Brand Samsang</p>
                                 <h2>24 DEC 2014</h2>
                             </div>
                         </div>
@@ -657,4 +660,49 @@ function showCategories($categories, $parent_id = 0, $char = '')
         }   
     });  
   });
+</script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        load_comment();
+        function load_comment()
+        {
+            var product_id = $('.com_product_id').val();
+            var _token = $('input[name="_token"]').val();
+            // alert(product_id)
+            $.ajax({
+                url: '{{url("/load_comment")}}',
+                method: 'post',
+                data: {
+                    product_id: product_id,
+                    _token: _token
+                },
+                success:function(data){
+                    $('#show_comment').html(data);
+                }
+            });
+        }
+        $('.add_comment').click(function(){
+            var product_id = $('.com_product_id').val();
+            var comment_name = $('.comment_name').val();
+            var comment_content = $('.comment_content').val();
+            var _token = $('input[name="_token"]').val();
+            $.ajax({
+                url: '{{url('/add_comment')}}',
+                method: 'post',
+                data: {
+                    product_id:product_id,
+                    comment_name:comment_name,
+                    comment_content:comment_content,
+                    _token:_token,
+                },
+                success:function(data){
+                    $('.notify').html('<p class="text-danger" style="color:red">Thêm bình luận thành công!</p>');
+                    load_comment();
+                    $('.notify').fadeOut(2000);
+                    $('.comment_name').val('');
+                    $('.comment_content').val('');
+                }
+            });
+        });
+    });
 </script>

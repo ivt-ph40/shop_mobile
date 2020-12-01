@@ -35,7 +35,7 @@ class HomeController extends Controller
         // $meta_canonical = $request->url();
         $listCategory = Category::where('status', 1)->get();
         $listBrand = Brand::where('status', 1)->get();
-        $listProduct = Product::where('status', 1)->get();
+        $listProduct = Product::where('status', 1)->paginate(6);
         return view('pages.home', compact('listCategory', 'listBrand', 'listProduct'/*, 'meta_des', 'meta_keywords', 'meta_title', 'meta_canonical'*/));
     }
     public function search(Request $request)

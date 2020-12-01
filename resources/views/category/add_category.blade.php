@@ -20,6 +20,11 @@
                     </div>
                     <p style="color:blue">{{ $errors->first('name') }}</p>
                     <div class="form-group">
+                        <label for="exampleInputSlug">Tên slug</label>
+                        <input type="text" name="slug" class="form-control" id="exampleInputSlug" placeholder="Tên Slug" value="{{ old('slug') }}">
+                    </div>
+                    <p style="color:blue">{{ $errors->first('slug') }}</p>
+                    <div class="form-group">
                         <label for="exampleInputDesc">Mô tả danh mục</label>
                         <textarea style="resize: none" rows="10" name="description"  class="form-control" id="exampleInputDesc" placeholder="Mô tả danh mục">{{ old('description') }}</textarea>
                     </div>

@@ -14,7 +14,9 @@ use Illuminate\Support\Facades\Route;
 */
 // frontend
 Route::get('/', 'HomeController@index')-> name('home.index');
-// Route::get('home', 'HomeController@index')-> name('home.index');
+//search
+Route::post('/search', 'HomeController@search')->name('home.search');
+
 
 // backend (admin)
 Route::get('admin', 'AdminController@index')-> name('admin.index');
@@ -72,16 +74,66 @@ Route::get('brand/statusby/{id}', 'BrandController@showProductByBrand')->name('b
 Route::get('product_detail/{id}', 'ProductController@detail')->name('product.detail');
 //add cart
 Route::post('cart/add', 'CartController@store')->name('cart.store');
+//add cart by ajax
+Route::post('/cart/add_by_ajax', 'CartController@add_by_ajax')->name('cart.add_by_ajax');
 //show cart
 Route::get('cart/show', 'CartController@index')->name('cart.index');
+//show cart by ajax
+Route::get('/giohang', 'CartController@giohang')->name('cart.giohang');
+//update cart by ajax
+Route::post('/update_cart_ajax', 'CartController@update_cart_ajax')->name('cart.update_cart_ajax');
+//xóa cart bằng ajax
+Route::get('/cart/{session_id}/delete_ajax', 'CartController@delete_ajax')->name('cart.delete_ajax');
+//Xóa tất cả bằng ajax
+Route::get('/cart/delete_all_ajax', 'CartController@delete_all_ajax')->name('cart.delete_all_ajax');
 //xoa cart
 Route::get('cart/{rowId}/delete', 'CartController@deleteByRowId')->name('cart.deleteByRowId');
+//xóa tất cả
+Route::get('cart/deleteAll', 'CartController@deleteAll')->name('cart.deleteAll');
 //update cart
 Route::get('cart/update', 'CartController@update')->name('cart.update');
 
 //checkout login
-Route::get('users/login', 'Auth\LoginController@showLoginForm')->name('users.showLoginForm');
+Route::get('users/login', 'UserController@showLoginForm')->name('users.showLoginForm');
+// login
+Route::post('users/login', 'UserController@login')->name('users.login');
+//logout
+Route::get('users/logout', 'UserController@logout')->name('users.logout');
 //register account
-Route::get('users/register', 'Auth\RegisterController@showRegistrationForm')->name('users.showRegistrationForm');
+Route::get('users/register', 'UserController@showRegistrationForm')->name('users.showRegistrationForm');
 //chon districts
-Route::post('/showDistrict', 'RegisterController@showDistrict');
+Route::post('/showDistrict', 'UserController@showDistrict');
+//cho wards
+Route::post('/showWard', 'UserController@showWard');
+
+//create account
+Route::post('register', 'UserController@register')->name('register');
+//add order
+Route::get('/add_order', 'OrderController@create')->name('order.create');
+//insert order
+Route::post('/add_order', 'OrderController@store')->name('order.store');
+//manage order
+Route::get('/manage_order', 'OrderController@index')->name('order.index');
+//xem thông tin order
+Route::get('/manage_order/{id}/view', 'OrderController@view_order')->name('order.view_order');
+//update qty
+Route::post('/update-order-quantity', 'OrderController@update_order_quantity')->name('order.update_order_quantity');
+
+//add images
+Route::get('/image/add/{id}', 'ImageController@create')->name('image.create');
+//chon anh
+Route::post('/select_image', 'ImageController@select_image')->name('image.select_image');
+//insert anh
+Route::post('/insert_image/{product_id}', 'ImageController@store')->name('image.store');
+//update ten anh o thu vien
+Route::post('/update/image_name', 'ImageController@update')->name('image.update');
+//xoa anh trong thu vien
+Route::post('/delete_image', 'ImageController@destroy')->name('image.destroy');
+Route::post('/update_image', 'ImageController@update_image')->name('image.update_image');
+
+
+
+//send mail
+Route::get('/contact-us', 'HomeController@showContactForm')->name('contact.showContactForm');
+//contact submit
+Route::post('/contact-us', 'HomeController@sendMail')->name('contact.sendMail');

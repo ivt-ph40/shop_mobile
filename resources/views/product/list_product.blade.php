@@ -42,6 +42,7 @@
             </th>
             <th>id</th>
             <th>name</th>
+            <th>path images</th>
             <th>category_id</th>
             <th>brand_id</th>
             <th>description</th>
@@ -59,6 +60,7 @@
               <td><label class="i-checks m-b-none"><input type="checkbox" name="post[]"><i></i></label></td>
               <td>{{ $product->id }}</td>
               <td>{{ $product->name }}</td>
+              <td><a href="{{ url('/image/add/'.$product->id) }}">Thêm thư viện ảnh</a></td>
               <td>{{ $product->category_id }}</td>
               <td>{{ $product->brand_id }}</td>
               <td><span class="text-ellipsis">{{ $product->description }}</span></td>

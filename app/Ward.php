@@ -10,4 +10,8 @@ class Ward extends Model
     protected $fillable = [
     	'name', 'district_id'
     ];
+    public function orders()
+    {
+    	return $this->hasMany('App\Order');
+    }
 }

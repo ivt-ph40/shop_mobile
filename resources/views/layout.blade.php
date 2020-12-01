@@ -3,8 +3,13 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
+    <meta name="description" content="Bán hàng thương mại điện tử">
     <meta name="author" content="">
+    <meta name="robots" content="INDEX,FOLLOW" /> 
+    <meta name="keywords" content="điện thoại di dộng, máy tính bảng, dien thoai chinh hang, may tinh xach tay, laptop chinh hang, phu kien laptop, điện thoại, dien thoai di dong,may tinh bang">
+    <meta name="title" content="Mobileshop.com | Điện thoại, Laptop, Tablet, Phụ kiện chính hãng giá tốt nhất">
+    <link rel="canonical" href="http://mobileshop.com"/>
+    {{-- <meta name="csrf-token" content="{{ csrf_token() }}">​ --}}
     <title>Mobile-Shopper</title>
     <link href="{{ asset('frontend/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('frontend/css/font-awesome.min.css') }}" rel="stylesheet">
@@ -13,6 +18,12 @@
     <link href="{{ asset('frontend/css/animate.css') }}" rel="stylesheet">
     <link href="{{ asset('frontend/css/main.css') }}" rel="stylesheet">
     <link href="{{ asset('frontend/css/responsive.css') }}" rel="stylesheet">
+    <link href="{{ asset('frontend/css/sweetalert.css') }}" rel="stylesheet">
+
+    <link href="{{ asset('frontend/css/lightgallery.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('frontend/css/lightslider.css') }}" rel="stylesheet">
+    <link href="{{ asset('frontend/css/prettify.css') }}" rel="stylesheet">
+
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
     <!--[if lt IE 9]>
     <script src="js/html5shiv.js"></script>
@@ -23,6 +34,13 @@
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/ico/apple-touch-icon-114-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="frontend/images/ico/apple-touch-icon-57-precomposed.png">
+    <style>
+        #img_hau{
+            width: 20px;
+            height: 25px;
+            border-radius: 50%;
+        }
+    </style>
 </head><!--/head-->
 
 <body>
@@ -95,9 +113,29 @@
                                     "><i class="fas fa-user-cog"></i>Quản trị viên</a></li>
                                 <li><a href="{{route('users.showLoginForm')}}"><i class="fa fa-user"></i> Tài khoản</a></li>
                                 <li><a href="#"><i class="fa fa-star"></i>Yêu thích</a></li>
-                                <li><a href="checkout.html"><i class="fa fa-crosshairs"></i>Thanh toán</a></li>
-                                <li><a href="{{route('cart.index')}}"><i class="fa fa-shopping-cart"></i>Giỏ hàng</a></li>
-                                <li><a href="{{route('users.showLoginForm')}}"><i class="fa fa-lock"></i>Đăng nhập</a></li>
+                                <li><a href="{{route('users.showLoginForm')}}"><i class="fa fa-crosshairs"></i>Thanh toán</a></li>
+                                <li><a href="{{route('cart.giohang')}}"><i class="fa fa-shopping-cart"></i>Giỏ hàng</a></li>
+                                @if (Session::get('id') != null)
+                                    <li class="dropdown">
+                                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                            <img alt="" id="img_hau" src="{{ ('backend/images/hau.png') }}">
+                                            <span class="username">
+                                                @if (Session::get('name'))
+                                                    {{Session::get('name')}}
+                                                @endif
+                                            </span>
+                                            <b class="caret"></b>
+                                        </a>
+                                        <ul class="dropdown-menu extended logout">
+                                            <li><a href="#"><i class=" fa fa-suitcase"></i>Profile</a></li>
+                                            <li><a href="#"><i class="fa fa-cog"></i> Settings</a></li>
+                                            <li><a href="{{ route('users.logout') }}"><i class="fa fa-key"></i> Log Out</a></li>
+                                        </ul>
+                                    </li>
+                                @else
+                                    <li><a href="{{route('users.showLoginForm')}}"><i class="fa fa-lock"></i>Đăng nhập</a></li>
+                                @endif
+                                
                             </ul>
                         </div>
                     </div>
@@ -120,30 +158,33 @@
                         <div class="mainmenu pull-left">
                             <ul class="nav navbar-nav collapse navbar-collapse">
                                 <li><a href="{{ URL::to('/') }}" class="active"><i class="fas fa-home"></i>&nbsp;Trang chủ</a></li>
-                                <li class="dropdown"><a href="#">Cửa hàng<i class="fa fa-angle-down"></i></a>
+                                {{-- <li class="dropdown"><a href="#">Sản phẩm theo thương hiệu<i class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="sub-menu">
-                                        <li><a href="shop.html">Sản phẩm</a></li>
-                                        {{-- <li><a href="product-details.html">Product Details</a></li> 
-                                        <li><a href="checkout.html">Checkout</a></li> 
-                                        <li><a href="cart.html">Cart</a></li> 
-                                        <li><a href="login.html">Login</a></li> --}} 
+                                        @foreach ($listBrand as $brand)
+                                            <li><a href="{{ URL::to('category/statusby/'.$brand->id) }}">
+                                                @if ($cat->parent_id == 0)
+                                                    {{$brand->name}}
+                                                @endif
+                                            </a></li>
+                                        @endforeach 
                                     </ul>
-                                </li> 
+                                </li>  --}}
                                 <li class="dropdown"><a href="#">Tin tức<i class="fa fa-angle-down"></i></a>
                                     {{-- <ul role="menu" class="sub-menu">
                                         <li><a href="blog.html">Blog List</a></li>
                                         <li><a href="blog-single.html">Blog Single</a></li>
                                     </ul> --}}
                                 </li> 
-                                <li><a href="{{route('cart.index')}}">Giỏ hàng</a></li>
-                                <li><a href="contact-us.html">Tương tác</a></li>
+                                {{-- <li><a href="{{route('cart.index')}}">Giỏ hàng</a></li> --}}
+                                <li><a href="{{route('contact.showContactForm')}}">Liên hệ</a></li>
                             </ul>
                         </div>
                     </div>
-                    <form action="">
+                    <form action="{{route('home.search')}}" method="post">
+                        @csrf
                         <div class="col-sm-5">
                             <div class="search_box pull-right">
-                                <input type="text" placeholder="Search..."/>
+                                <input type="text" name="search" placeholder="Search..."/>
                                 <button type="submit" class="btn btn btn-danger"><i class="fas fa-search"></i></button>
                             </div>
 
@@ -226,18 +267,35 @@
                     <div class="left-sidebar">
                         <h2>Danh mục</h2>
                         <div class="panel-group category-products" id="accordian"><!--category-productsr-->
-                            {{-- @foreach ($listCategory as $key=> $categories)
+                            @foreach ($listCategory as $key=> $categories)
+                            
                             <div class="panel panel-default">
-                                
-                                <div class="panel-heading">
-                                    <h4 class="panel-title"><a href="{{ URL::to('category/statusby/'.$categories->id) }}">{{$categories->name}}</a></h4>
-                                </div>  
-                            </div>  
-                            @endforeach --}}
-
-                            @php
+                                @if ($categories->parent_id == 0)
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordian" href="#{{$categories->slug}}"><span class="badge pull-right"><i class="fa fa-plus"></i></span>{{$categories->name}}</a>
+                                        </h4>
+                                    </div>  
+                                    <div id="{{$categories->slug}}" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <ul>
+                                                @foreach ($listCategory as $key=> $cat)
+                                                    @if ($cat->parent_id == $categories->id)
+                                                        <li><a href="{{ URL::to('category/statusby/'.$cat->id) }}">{{$cat->name}}</a></li>
+                                                    @endif
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    </div> 
+                                @endif
+                            </div>
+                            
+                                {{-- {{ URL::to('category/statusby/'.$categories->id) }} --}}
+                            @endforeach
+                            
+                            {{-- @php
                                 showCategories($listCategory);
-                            @endphp
+                            @endphp --}}
 
                         </div><!--/category-products-->
                     
@@ -443,6 +501,16 @@
     <script src="{{asset('frontend/js/main.js')}}"></script>
     <script src="{{asset('frontend/js/main.js')}}"></script>
     <script src="{{ asset('js/jquery-3.5.1.min.js') }}"></script>
+    <script src="{{asset('frontend/js/sweetalert.min.js')}}"></script>
+
+    <script src="{{asset('frontend/js/lightgallery-all.min.js')}}"></script>
+    <script src="{{asset('frontend/js/lightslider.js')}}"></script>
+    <script src="{{asset('frontend/js/prettify.js')}}"></script>
+    {{-- <script src="https://www.google.com/recaptcha/api.js" async defer></script> --}}
+    <div id="fb-root"></div>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v9.0" nonce="607YfmOT"></script>
+    <script src="{{asset('frontend/ckeditor/ckeditor.js')}}"></script>
+
 </body>
 </html>
 
@@ -469,7 +537,7 @@ function showCategories($categories, $parent_id = 0, $char = '')
         foreach ($cate_child as $key => $item)
         {
             // Hiển thị tiêu đề chuyên mục
-            echo "<h4 class='panel-title'><li><a href='http://127.0.0.1:8000/category/statusby/"."$item->id'>".$char.$item->name;
+            echo "<h4 class='panel-title'><li><a href='http://mobileshop.com/category/statusby/"."$item->id'>".$char.$item->name;
              
             // Tiếp tục đệ quy để tìm chuyên mục con của chuyên mục đang lặp
             showCategories($categories, $item->id, $char.'- ');
@@ -483,3 +551,110 @@ function showCategories($categories, $parent_id = 0, $char = '')
     }
 }
 @endphp
+{{-- ajax mua hàng --}}
+<script>
+    $(document).ready(function(){
+        $('.add-to-cart').click(function(){
+            // alert('ssdjdj');
+            var id = $(this).data('id');
+            // alert(id)
+            var product_id = $('.product_id').val();
+            var name = $('.product_name').val();
+            var price = $('.product_price').val();
+            var quantity = $('.product_qty').val();
+            var image = $('.product_image').val();
+            var quantity_kho = $('.quantity_kho').val();
+            var _token = $('input[name="_token"]').val();
+            // alert(_token)
+            if(parseInt(quantity) > parseInt(quantity_kho)){
+                swal("Bạn đã đặt quá số lượng hiện có!", "Vui lòng đặt lại cho phù hợp!");
+            }else{
+                $.ajax({
+                    url: '{{url('/cart/add_by_ajax')}}',
+                    method: 'post',
+                    data: {
+                        product_id: product_id,
+                        name: name,
+                        price: price,
+                        quantity: quantity,
+                        quantity_kho: quantity_kho,
+                        image: image,
+                        _token: _token
+                    },
+                    success:function(data){
+                        // alert(product_id)
+
+                        swal({
+                            title: "Đã thêm sản phẩm vào giỏ hàng",
+                            text: "Bạn có thể mua hàng tiếp hoặc tới giỏ hàng để tiến hành thanh toán",
+                            showCancelButton: true,
+                            cancelButtonText: "Xem tiếp",
+                            confirmButtonClass: "btn-success",
+                            confirmButtonText: "Đi đến giỏ hàng",
+                            closeOnConfirm: false
+                        },
+                        function() {
+                            window.location.href = "{{url('/giohang')}}";
+                        });
+                    }
+                });
+            }
+        });
+    });
+</script>
+{{-- ajax mua hàng --}}
+
+{{-- truyền trình soạn thảo văn bản vào --}}
+<script>
+    CKEDITOR.replace('ckeditor3');
+</script>
+{{-- truyền trình soạn thảo văn bản vào --}}
+
+{{-- thông báo khi vượt quá số lượng đặt hàng --}}
+<script>
+    $(document).ready(function(){
+        $('.product_qty').change(function(){
+            var quantity = parseInt($(this).val());
+            // var product_kho = $(this).attr('data-totalQty');
+            // var quantity_daorder = $(this).attr('data-daOrder');
+            // var total_order = var quantity_daorder + var quantity;
+            // alert(quantity_daorder)
+            if(quantity < 0){
+                swal("Không được phép nhập số lượng âm!");
+                // location.reload();
+            }
+            if(quantity > 10){
+                swal("Số lượng đặt hàng vượt quá giới hạn cho phép là 10!");
+                // location.reload();
+            }
+            if(isNaN(quantity)){
+                swal("Số lượng đặt hàng không đúng định dạng số!");
+                // location.reload();
+            }
+            // if(quantity > product_kho){
+            //     alert('Số lượng đặt hàng đã lớn hơn số lượng hàng còn trong kho!');
+            //     location.reload();
+            // }
+        });
+    });
+</script>
+
+{{-- làm gallay-image --}}
+<script>
+    $(document).ready(function() {
+    $('#imageGallery').lightSlider({
+        gallery:true,
+        item:1,
+        loop:true,
+        thumbItem:4,
+        slideMargin:0,
+        enableDrag: false,
+        currentPagerPosition:'left',
+        onSliderLoad: function(el) {
+            el.lightGallery({
+                selector: '#imageGallery .lslide'
+            });
+        }   
+    });  
+  });
+</script>

@@ -10,4 +10,8 @@ class Province extends Model
     protected $fillable = [
     	'name'
     ];
+    public function orders()
+    {
+    	return $this->hasMany('App\Order');
+    }
 }

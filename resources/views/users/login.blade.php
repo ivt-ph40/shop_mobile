@@ -27,15 +27,17 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		@if (Session::get('message'))
 			<h4 align="center" style="color:red">{{ Session::get('message') }}</h4>
 		@endif
-		<form action="{{ route('admin.dashboard') }}" method="post">
+		<form action="{{ route('users.login') }}" method="post">
 			@csrf
-			<input type="email" class="ggg" name="admin_email" placeholder="E-MAIL" required="">
-			<input type="password" class="ggg" name="admin_password" placeholder="PASSWORD" required="">
+			<input type="email" class="ggg" name="email" placeholder="E-MAIL" required="">
+			<input type="password" class="ggg" name="password" placeholder="PASSWORD" required="">
 			<span><input type="checkbox" />Nhớ mật khẩu</span>
 			<h6><a href="{{ route('users.showRegistrationForm') }}">Đăng ký tài khoản!</a></h6>
 				<div class="clearfix"></div>
 				<input type="submit" value="Đăng nhập" name="login">
+
 		</form>
+		<a href="{{route('home.index')}}"><button class="btn btn-success">Quay về trang chủ</button></a>
 		{{-- <p>Don't Have an Account ?<a href="registration.html">Create an account</a></p> --}}
 </div>
 </div>
@@ -46,5 +48,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <script src="{{asset('backend/js/jquery.nicescroll.js')}}"></script>
 <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="js/flot-chart/excanvas.min.js"></script><![endif]-->
 <script src="{{asset('backend/js/jquery.scrollTo.js')}}"></script>
+{{-- <script src="https://www.google.com/recaptcha/api.js" async defer></script> --}}
 </body>
 </html>

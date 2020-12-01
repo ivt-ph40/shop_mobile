@@ -5,6 +5,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="keywords" content="Visitors Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, 
 Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
 <!-- bootstrap-css -->
 <link rel="stylesheet" href="{{asset('backend/css/bootstrap.min.css')}}" >
@@ -25,6 +26,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <script src="{{asset('backend/js/jquery2.0.3.min.js')}}"></script>
 <script src="{{asset('backend/js/raphael-min.js')}}"></script>
 <script src="{{asset('backend/js/morris.js')}}"></script>
+
 <link rel="stylesheet" href="{{asset('https://use.fontawesome.com/releases/v5.6.3/css/all.css')}}">
 
 </head>
@@ -53,8 +55,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                 <img alt="" src="{{('backend/images/hau.png')}}">
                 <span class="username">
-                    @if (Session::get('admin_name'))
-                        {{Session::get('admin_name')}}
+                    @if (Session::get('name'))
+                        {{Session::get('name')}}
                     @endif
                 </span>
                 <b class="caret"></b>
@@ -88,6 +90,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                     <a class="active" href="{{ route('admin.show_dashboard') }}">
                         <i class="fa fa-dashboard"></i>
                         <span>Tổng quan</span>
+                    </a>
+                </li>
+                <li class="sub-menu">
+                    <a href="{{route('order.index')}}">
+                        <i class="fa fa-book"></i>
+                        <span>Quản lý đơn hàng</span>
                     </a>
                 </li>
                 <li class="sub-menu">
@@ -177,6 +185,107 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <script src="{{asset('backend/js/jquery.nicescroll.js')}}"></script>
 <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="js/flot-chart/excanvas.min.js"></script><![endif]-->
 <script src="{{asset('backend/js/jquery.scrollTo.js')}}"></script>
+
+{{-- chọn thư viện ảnh cho sản phẩm --}}
+<script>
+    $(document).ready(function(){
+        load_image();
+        function load_image(){
+            var pro_id = $('.pro_id').val();
+            var _token = $("input[name='_token']").val();
+            // alert(pro_id)
+            $.ajax({
+                url: "{{url('/select_image')}}",
+                method: 'post',
+                data: {
+                    pro_id : pro_id,
+                    _token : _token
+                },
+                success:function(data){
+                    $('#image_load').html(data);
+                }
+            });
+        }
+        $('#file').change(function(){
+            var error = '';
+            var files = $('#file')[0].files;
+            if (files.length > 4){
+                error += '<p>Bạn chỉ được chọn tối đa 4 ảnh</p>';
+            } else if(files.length == ''){
+                error += '<p>Bạn không được phép bỏ trống</p>';
+            } else if(files.size > 2000000){
+                error += '<p>File ảnh không được lớn hơn 2MB</p>';
+            }
+            if(error == ''){
+
+            } else{
+                $('#file').val('');
+                $('#error_image').html('<span class="text-danger">'+error+'</span>');
+                return flase;
+            }
+        });
+        $(document).on('blur', '.edit_image_name', function(){
+            var img_id = $(this).data('img_id');
+            var img_text = $(this).text();
+            var _token = $("input[name='_token']").val();
+            $.ajax({
+                url: '{{url('/update/image_name')}}',
+                method: 'post',
+                data: {
+                    img_id:img_id,
+                    img_text:img_text,
+                    _token:_token
+                },
+                success:function(data){
+                    load_image();
+                    $('#error_image').html('<span class="text-danger">Cập nhật tên ảnh thành công!</span>');
+                }
+            });
+        });
+        $(document).on('click', '.delete_image', function(){
+            var img_id = $(this).data('id');
+            var _token = $("input[name='_token']").val();
+            if (confirm('Bạn có chắc chắn muốn xóa?')){
+                $.ajax({
+                    url: '{{url('/delete_image')}}',
+                    method: 'post',
+                    data: {
+                        img_id: img_id,
+                        _token: _token
+                    },
+                    success:function(data){
+                        load_image();
+                        $('#error_image').html('<span class="text-danger">Xóa thành công!</span>');
+                    }
+                });
+            }
+        });
+        $(document).on('change', '.file_image', function(){
+            var img_id = $(this).data('img_id');
+            var image = document.getElementById('file-'+img_id).files[0];
+            var form_data = new FormData();
+            form_data.append("file", image);
+            form_data.append("img_id", img_id);
+            $.ajax({
+                url: '{{url('/update_image')}}',
+                method: 'post',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: form_data,
+                contentType: false,
+                cache: false,
+                processData: false,
+                success:function(data){
+                    load_image();
+                    $('#error_image').html('<span class="text-danger">Cập nhật thành công!</span>');
+                }
+            });
+        });
+    });
+</script>
+{{-- chọn thư viện ảnh cho sản phẩm --}}
+
 <!-- morris JavaScript -->	
 <script>
 	$(document).ready(function() {
@@ -264,6 +373,45 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 		});
 	</script>
+    <script src="{{asset('backend/ckeditor/ckeditor.js')}}"></script>
+    <script> 
+    CKEDITOR.replace('ckeditor1'); 
+    CKEDITOR.replace('ckeditor2'); 
+    </script>
+    <script>
+        $('.order_details').change(function(){
+            var order_status = $(this).val();
+            var order_id = $(this).children(":selected").attr("id");
+            var _token = $('input[name="_token"]').val();
+            // alert(_token)
+            //lay so luong
+            quantity = [];
+            $('input[name="product_qty"]').each(function(){
+                quantity.push($(this).val());
+            });
+
+            //lay order_id
+            order_product_id = [];
+            $('input[name="order_product_id"]').each(function(){
+                order_product_id.push($(this).val());
+            });
+            $.ajax({
+                url : "{{url('/update-order-quantity')}}",
+                method : 'post', 
+                data : {
+                    order_status : order_status,
+                    order_id : order_id, 
+                    _token : _token,
+                    quantity : quantity,
+                    order_product_id : order_product_id
+                },
+                success:function(data){
+                    alert('Cập nhật thành công!');
+                    location.reload();
+                }
+            });
+        });
+    </script>
 	<!-- //calendar -->
 </body>
 </html>

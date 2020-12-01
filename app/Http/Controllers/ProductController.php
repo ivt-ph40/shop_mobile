@@ -6,8 +6,11 @@ use App\Product;
 use Illuminate\Http\Request;
 use DB;
 use App\Brand;
+use App\Image;
 use App\Category;
 use Session;
+use Cart;
+use File;
 session_start();
 class ProductController extends Controller
 {
@@ -57,22 +60,35 @@ class ProductController extends Controller
             'status' => 'required'
         ]);
         $get_image = $request->file('image');
+        //them moi
+        $path_product = 'upload/product/';
+        $path_image = 'upload/images/';
+        //them moi
         if($get_image){
             $get_name_image = $get_image->getClientOriginalName();
             $name_image = current(explode('.', $get_name_image));
             $new_image = $name_image.rand(0,99).'.'.$get_image->getClientOriginalExtension();
-            $get_image-> move('upload/product', $new_image);
+            $get_image-> move($path_product, $new_image);
+            //them moi
+            File::copy($path_product.$new_image, $path_image.$new_image);
+            //them moi
             $data['image'] = $new_image;
-            // DB::table('products')->insert($data);
-            Product::create($data);
-            return Redirect()->route('product.add_product')->with('message', 'Thêm product thành công!');
-        } else{
+            /*Product::create($data);
+            return Redirect()->route('product.add_product')->with('message', 'Thêm product thành công!');*/
+        } 
+        /*else{
             $data['image'] = '';
-            // DB::table('products')->insert($data);
             Product::create($data);
             return Redirect()->route('product.add_product')->with('message', 'Thêm product thành công!');
-        }
-        
+        }*/
+        //them moi
+        $product_id = DB::table('products')->insertGetId($data);
+        $data_img['name'] = $new_image;
+        $data_img['path'] = $new_image;
+        $data_img['product_id'] = $product_id;
+        Image::create($data_img);
+        return Redirect()->route('product.add_product')->with('message', 'Thêm product thành công!');
+        //them moi
     }
     public function unactive($id){
         $this->AuthLogin();
@@ -131,21 +147,31 @@ class ProductController extends Controller
             return Redirect()->route('product.index')->with('message', 'Cập nhật thành công!');
         }
     }
-    public function detail($id)
+    public function detail(Request $request, $id)
     {
-        // $listCategory = DB::table('categories')->where('status', 1)->orderBy('id', 'asc')->get();
         $listCategory = Category::where('status', 1)->get();
-        // $listBrand = DB::table('branches')->where('status', 1)->orderBy('id', 'asc')->get();
         $listBrand = Brand::where('status', 1)->get();
-        // $listProductDetail = DB::table('products')->where('status', 1)->where('id', $id)->orderBy('price', 'asc')->first();
         $listProductDetail = Product::with('brand', 'category')->where('id', $id)->first();
-        $category_id = $listProductDetail->category['id'];
-
-        // dd($category_id);
         // dd($listProductDetail->toArray());
-        // $relate = Category::with('products')->where('id', $category_id)->first();
+        //lay images
+        $images = Image::where('product_id', $listProductDetail->id)->get();
+        $category_id = $listProductDetail->category['id'];
         $relate = DB::table('products')->join('categories', 'categories.id', '=', 'products.category_id')->where('categories.id', $category_id)->whereNotIn('products.id', [$id])->get();
-        // dd($relate->toArray());
-        return view('product.product_detail')->with('listCategory', $listCategory)->with('listBrand', $listBrand)->with('listProductDetail', $listProductDetail)->with('relate', $relate);
+        
+        /*$quantity = $request->qty;
+        $product_info = Product::where('id', $id)->first();
+        $cart = Cart::content();
+        $quantity_kho = $listProductDetail->quantity;
+        $data['id'] = $id;
+        $data['qty'] = $request->qty;
+        if ($cart) {
+            foreach ($cart as $key => $cat) {
+                if ($cat->id == $data['id']) {
+                    $total_qty = $cat->qty + $data['qty'];
+                }
+            }
+        }*/
+
+        return view('product.product_detail')->with('listCategory', $listCategory)->with('listBrand', $listBrand)->with('listProductDetail', $listProductDetail)->with('relate', $relate)->with('images', $images);
     }
 }

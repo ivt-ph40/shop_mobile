@@ -45,6 +45,7 @@
               </label>
             </th>
             <th>Tên danh mục</th>
+            <th>Tên Slug</th>
             <th>Mô tả</th>
             <th>Hiển thị</th>
             <th>Parent Id</th>
@@ -56,6 +57,7 @@
             <tr>
               <td><label class="i-checks m-b-none"><input type="checkbox" name="post[]"><i></i></label></td>
               <td>{{ $category->name }}</td>
+              <td>{{ $category->slug }}</td>
               <td><span class="text-ellipsis">{{ $category->description }}</span></td>
               <td><span class="text-ellipsis">
                 <?php

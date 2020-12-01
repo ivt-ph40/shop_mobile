@@ -3,61 +3,47 @@
 {{-- @foreach ($listProductDetail as $productDetail) --}}
 	<div class="product-details"><!--product-details-->
 		<div class="col-sm-5">
-			<div class="view-product">
+			{{-- <div class="view-product">
 				<img src="{{URL::to('upload/product/'.$listProductDetail->image)}}" alt="" />
-				<h3>ZOOM</h3>
-			</div>
-			<div id="similar-product" class="carousel slide" data-ride="carousel">
-				
-				  <!-- Wrapper for slides -->
-				    <div class="carousel-inner">
-						{{-- <div class="item active">
-						  <a href=""><img src="{{URL::to('images/similar1.jpg')}}" alt=""></a>
-						  <a href=""><img src="{{URL::to('images/similar2.jpg')}}" alt=""></a>
-						  <a href=""><img src="{{URL::to('images/similar3.jpg')}}" alt=""></a>
-						</div> --}}
-						<div class="item active">
-						  <a href=""><img src="{{URL::to('frontend/images/similar1.jpg')}}" alt=""></a>
-						  <a href=""><img src="{{URL::to('frontend/images/similar2.jpg')}}" alt=""></a>
-						  <a href=""><img src="{{URL::to('frontend/images/similar3.jpg')}}" alt=""></a>
-						</div>
-						<div class="item">
-						  <a href=""><img src="{{URL::to('frontend/images/similar1.jpg')}}" alt=""></a>
-						  <a href=""><img src="{{URL::to('frontend/images/similar2.jpg')}}" alt=""></a>
-						  <a href=""><img src="{{URL::to('frontend/images/similar3.jpg')}}" alt=""></a>
-						</div>
-						
-					</div>
-
-				  <!-- Controls -->
-				  <a class="left item-control" href="#similar-product" data-slide="prev">
-					<i class="fa fa-angle-left"></i>
-				  </a>
-				  <a class="right item-control" href="#similar-product" data-slide="next">
-					<i class="fa fa-angle-right"></i>
-				  </a>
-			</div>
+			</div> --}}
+			<ul id="imageGallery">
+			@foreach ($images as $img)
+			  <li data-thumb="{{asset('upload/images/'.$img->path)}}" data-src="{{asset('upload/images/'.$img->path)}}" />
+			  		<img width="100%" src="{{asset('upload/images/'.$img->path)}}" />
+			  </li>
+			@endforeach  
+			</ul>
+			
 		</div>
 		<div class="col-sm-7">
+			@if (session()->has('message'))
+				<div class="alert alert-danger" role="alert">
+				  <h4>{{session()->get('message')}}</h4>
+				</div>
+			@endif
 			<div class="product-information"><!--/product-information-->
 				<img src="images/product-details/new.jpg" class="newarrival" alt="" />
 				<h2>{{$listProductDetail->name}}</h2>
 				<p>ID: {{$listProductDetail->id}}</p>
 				<img src="images/product-details/rating.png" alt="" />
-				<form action="{{route('cart.store')}}" method="post">
+				<form action="" method="post">
 					@csrf
 					<span>
 						<span>${{number_format($listProductDetail->price)}}</span>
 						<label>Quantity:</label>
-						<input type="hidden" name="product_id_hidden" value="{{$listProductDetail->id}}">
-						<input type="number" name="qty" min="1" value="1" />
-						<button type="submit" class="btn btn-fefault cart">
+						<input type="hidden" name="product_id_hidden" class="product_id" value="{{$listProductDetail->id}}">
+						<input type="hidden" name="product_name" class="product_name" value="{{$listProductDetail->name}}">
+						<input type="hidden" name="product_price" class="product_price" value="{{$listProductDetail->price}}">
+						<input type="hidden" name="quantity_kho" class="quantity_kho" value="{{$listProductDetail->quantity}}">
+						<input type="text" name="product_qty" class="product_qty" value="1" />
+						<input type="hidden" name="product_image" class="product_image" value="{{$listProductDetail->image}}">
+						<button type="button" name="add-to-cart" class="btn btn-fefault add-to-cart" data-id = "{{$listProductDetail->id}}">
 							<i class="fa fa-shopping-cart"></i>
 							Add to cart
 						</button>
 					</span>
 				</form>
-				<p><b>Số lượng :</b> {{$listProductDetail->quantity}}</p>
+				<p><b>Số lượng trong kho :</b> {{$listProductDetail->quantity}}</p>
 				<p><b>Category:</b> {{$listProductDetail->category['name']}}</p>
 				{{-- @foreach ($listProductDetail->brand as $key => $value) --}}
 				
@@ -72,9 +58,9 @@
 	<div class="category-tab shop-details-tab"><!--category-tab-->
 		<div class="col-sm-12">
 			<ul class="nav nav-tabs">
-				<li  class="active"><a href="#details" data-toggle="tab">Details</a></li>
-				<li><a href="#companyprofile" data-toggle="tab">Descriptions</a></li>
-				<li><a href="#reviews" data-toggle="tab">Reviews (5)</a></li>
+				<li  class="active"><a href="#details" data-toggle="tab">Thông tin chi tiết</a></li>
+				<li><a href="#companyprofile" data-toggle="tab">Mô tả</a></li>
+				<li><a href="#reviews" data-toggle="tab">Đánh giá</a></li>
 			</ul>
 		</div>
 		<div class="tab-content">
@@ -132,7 +118,7 @@
 	</div><!--/category-tab-->
 
 	<div class="recommended_items"><!--recommended_items-->
-		<h2 class="title text-center">recommended items</h2>
+		<h2 class="title text-center">Sản phẩm liên quan</h2>
 		
 		<div id="recommended-item-carousel" class="carousel slide" data-ride="carousel">
 			<div class="carousel-inner">
@@ -146,7 +132,7 @@
 											<img src="{{URL::to('upload/product/'.$product->image)}}" alt="" height="250px" />
 											<h2>${{number_format($product->price)}}</h2>
 											<p>{{$product->name}}</p>
-											<button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
+											<button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Xem chi tiết</button>
 										</div>
 									</div>
 								</div>

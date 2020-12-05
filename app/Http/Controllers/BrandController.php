@@ -23,7 +23,7 @@ class BrandController extends Controller
     {
         // $this->AuthLogin();
         // $list_brand = DB::table('brands')->get();
-        $list_brand = Brand::all();
+        $list_brand = Brand::paginate(8);
 
         return view('brand.list_brand')->with('list_brand', $list_brand);
     }

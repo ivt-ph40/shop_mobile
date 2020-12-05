@@ -33,7 +33,7 @@ class ProductController extends Controller
     {
         // $this->AuthLogin();
         // $list_product = DB::table('products')->get();
-        $list_product = Product::all();
+        $list_product = Product::paginate(6);
 
         return view('product.list_product')->with('list_product', $list_product);
     }

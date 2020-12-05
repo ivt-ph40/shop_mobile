@@ -17,17 +17,17 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function AuthLogin(){
-        $admin_id = Session::get('admin_id');
-        if ($admin_id) {
-            return Redirect()->route('admin.show_dashboard');
-        } else{
-            return Redirect()->route('admin.index')->send();
-        }
-    }
+    // public function AuthLogin(){
+    //     $admin_id = Session::get('admin_id');
+    //     if ($admin_id) {
+    //         return Redirect()->route('admin.show_dashboard');
+    //     } else{
+    //         return Redirect()->route('users.showLoginForm')->send();
+    //     }
+    // }
     public function index()
     {
-        $this->AuthLogin();
+        // $this->AuthLogin();
         // $list_category = DB::table('categories')->get();
         $list_category = Category::all();
 
@@ -41,7 +41,7 @@ class CategoryController extends Controller
      */
     public function add_category()
     {
-        $this->AuthLogin();
+        // $this->AuthLogin();
         // $categories = Category::where('parent_id', null)->get();
         $categories = Category::all();
         // $detal = $this->showCategories($categories);
@@ -58,30 +58,30 @@ class CategoryController extends Controller
      */
     public function store(CreateCategoryRequest $request)
     {
-        $this->AuthLogin();
+        // $this->AuthLogin();
         $data = $request->all();
         Category::create($data);
         return Redirect()->route('category.add_category')->with('message', 'Thêm category thành công!');
     }
     public function unactive($id){
-        $this->AuthLogin();
+        // $this->AuthLogin();
         Category::where('id', $id)->update(['status' => 0]);
         return Redirect()->route('category.index')-> with('message', 'Ẩn danh mục Category thành công!');
     }
     public function active($id){
-        $this->AuthLogin();
+        // $this->AuthLogin();
         Category::where('id', $id)->update(['status' => 1]);
         return Redirect()->route('category.index')-> with('message', 'Hiện danh mục Category thành công!');
     }
     public function delete($id){
-        $this->AuthLogin();
+        // $this->AuthLogin();
         Category::where('id', $id)->delete();
         return Redirect()->route('category.index')-> with('thongbao', 'Xóa thành công!');
     }
     
     public function edit($id)
     {
-        $this->AuthLogin();
+        // $this->AuthLogin();
         // $categories = Category::where('parent_id', null)->get();
         $categories = Category::all();
         $edit_category = Category::where('id', $id)->first();
@@ -92,7 +92,7 @@ class CategoryController extends Controller
 
     public function update(UpdateCategoryRequest $request, $id)
     {
-        $this->AuthLogin();
+        // $this->AuthLogin();
         $data =array();
         $data['name']   = $request ->name;
         $data['slug']   = $request ->slug;

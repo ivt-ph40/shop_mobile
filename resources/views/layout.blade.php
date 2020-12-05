@@ -81,37 +81,15 @@
                         <div class="logo pull-left">
                             <a href="{{ route('home.index') }}"><img id="img_a" src="{{asset('frontend/images/logo.png')}}" alt="" /></a>
                         </div>
-                        {{-- <div class="btn-group pull-right">
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-default dropdown-toggle usa" data-toggle="dropdown">
-                                    USA
-                                    <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">Canada</a></li>
-                                    <li><a href="#">UK</a></li>
-                                </ul>
-                            </div>
-                            
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-default dropdown-toggle usa" data-toggle="dropdown">
-                                    DOLLAR
-                                    <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">Canadian Dollar</a></li>
-                                    <li><a href="#">Pound</a></li>
-                                </ul>
-                            </div>
-                        </div> --}}
                     </div>
                     <div class="col-sm-8">
                         <div class="shop-menu pull-right">
                             <ul class="nav navbar-nav">
                                 <li><a href="
-                                    @if (session()->has('admin_id'))
+                                    @if (Session::get('id'))
                                         {{route('admin.show_dashboard')}}
-                                    @else{{route('admin.index')}}
+                                    @else
+                                        {{route('users.showLoginForm')}}
                                     @endif
                                     "><i class="fas fa-user-cog"></i>Quản trị viên</a></li>
                                 <li><a href="{{route('users.showLoginForm')}}"><i class="fa fa-user"></i> Tài khoản</a></li>
@@ -121,7 +99,9 @@
                                 @if (Session::get('id') != null)
                                     <li class="dropdown">
                                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                                            <img alt="" id="img_hau" src="{{ asset('backend/images/hau.png') }}">
+                                            @if (Session::get('image'))
+                                                <img alt="" id="img_hau" src="{{ URL::to('upload/users/'.(Session::get('image'))) }}">
+                                            @endif
                                             <span class="username">
                                                 @if (Session::get('name'))
                                                     {{Session::get('name')}}
@@ -130,9 +110,12 @@
                                             <b class="caret"></b>
                                         </a>
                                         <ul class="dropdown-menu extended logout">
-                                            <li><a href="#"><i class=" fa fa-suitcase"></i>Profile</a></li>
-                                            <li><a href="#"><i class="fa fa-cog"></i> Settings</a></li>
-                                            <li><a href="{{ route('users.logout') }}"><i class="fa fa-key"></i> Log Out</a></li>
+                                            @if (Session::get('id'))
+                                            <li><a href="{{route('users.info_profile', Session::get('id'))}}"><i class=" fa fa-suitcase"></i>Thông tin cá nhân</a></li>
+                                            @endif
+                                            <li><a href="{{route('users.show_profile')}}"><i class="fa fa-cog"></i>Cài đặt</a></li>
+                                            
+                                            <li><a href="{{ route('users.logout') }}"><i class="fa fa-key"></i>Đăng xuất</a></li>
                                         </ul>
                                     </li>
                                 @else
@@ -187,7 +170,12 @@
                         @csrf
                         <div class="col-sm-5">
                             <div class="search_box pull-right">
-                                <input type="text" name="search" placeholder="Search..."/>
+                                @if (isset($value_search))
+                                    <input type="text" name="search" value="{{$value_search}}" placeholder="Search..."/>
+                                    @else
+                                    <input type="text" name="search" value="" placeholder="Search..."/>
+                                @endif
+                                
                                 <button type="submit" class="btn btn btn-danger"><i class="fas fa-search"></i></button>
                             </div>
 
@@ -661,6 +649,8 @@ function showCategories($categories, $parent_id = 0, $char = '')
     });  
   });
 </script>
+
+{{-- TAO COMMENT SP --}}
 <script type="text/javascript">
     $(document).ready(function(){
         load_comment();
@@ -698,11 +688,155 @@ function showCategories($categories, $parent_id = 0, $char = '')
                 success:function(data){
                     $('.notify').html('<p class="text-danger" style="color:red">Thêm bình luận thành công!</p>');
                     load_comment();
-                    $('.notify').fadeOut(2000);
+                    $('.notify').fadeOut(4000);
                     $('.comment_name').val('');
                     $('.comment_content').val('');
                 }
             });
         });
+        $('.rep_comment').click(function(){
+            $('.content_rep').html();
+        })
     });
 </script>
+{{-- TAO COMMENT SP --}}
+
+{{-- ĐÁNH GIÁ SP --}}
+<script type="text/javascript">
+    //hàm khi sao ko được chọn sẽ là màu nâu
+    function notSelect_by_proId(product_id){
+        for (var count = 1; count <= 5 ; count++){
+            $('#'+product_id+'-'+count).css('color', '#ccc');
+        }
+        listRatingText = {
+            1: 'Không thích',
+            2: 'Tạm được',
+            3: 'Bình thường',
+            4: 'Rất tốt',
+            5: 'Tuyệt vời'
+        }
+    }
+    //hover chuột đánh giá sao
+    $(document).on('mouseenter', '.rating', function(){
+        
+        var index = $(this).data('index');
+        var product_id = $(this).data('pro_id');
+        $('.text').text(listRatingText[index]).show();
+        notSelect_by_proId(product_id);
+        for (var count = 1; count <= index ; count++){
+            $('#'+product_id+'-'+count).css('color', '#ffcc00');
+        }
+    });
+    //nha chuot khong danh gia
+    $(document).on('mouseleave', '.rating', function(){
+        // $('.text').text('').show();
+        var index = $(this).data('index');
+        var product_id = $(this).data('pro_id');
+        // var rating = $(this).data('rating');
+        notSelect_by_proId(product_id);
+        for (var count = 1; count <= index ; count++){
+            $('#'+product_id+'-'+count).css('color', '#ffcc00');
+        }
+    });
+    $(document).on('click', '.rating', function(){
+        var index = $(this).data('index');
+        var product_id = $(this).data('pro_id');
+        $('.text').text(listRatingText[index]).show();
+        notSelect_by_proId(product_id);
+        for (var count = 1; count <= index ; count++){
+            $('#'+product_id+'-'+count).css('color', '#ffcc00');
+        }
+        $(document).on('click', '.add_review', function(){
+            var star = $(this).data('star');
+            var product_id = $(this).data('pro_id');
+            var fullname = $('.review_name').val();
+            var content = $('.review_content').val();
+            alert(star)
+            // alert(product_id)
+            // alert(fullname)
+            // alert(content)
+        });
+        // var _token = $('input[name="_token"]').val();
+        // $.ajax({
+        //     url: "{{url('add_rating')}}",
+        //     method: 'post',
+        //     data: {
+        //         index:index,
+        //         product_id:product_id,
+        //         _token:_token
+        //     },
+        //     success:function(data){
+        //         if(data == 'done'){
+        //             alert("Bạn đã đánh giá "+index+" trên 5 sao");
+        //             location.reload();
+        //         }else{
+        //             alert('Lỗi đánh giá!');
+        //         }
+        //     }
+        // });
+    });
+</script>
+
+
+
+
+{{-- <script type="text/javascript">
+    //hàm khi sao ko được chọn sẽ là màu nâu
+    function notSelect_by_proId(product_id){
+        for (var count = 1; count <= 5 ; count++){
+            $('#'+product_id+'-'+count).css('color', '#ccc');
+        }
+        listRatingText = {
+            1: 'Không thích',
+            2: 'Tạm được',
+            3: 'Bình thường',
+            4: 'Rất tốt',
+            5: 'Tuyệt vời'
+        }
+    }
+    //hover chuột đánh giá sao
+    $(document).on('mouseenter', '.rating', function(){
+        
+        var index = $(this).data('index');
+        var product_id = $(this).data('pro_id');
+        $('.text').text('').text(listRatingText[index]).show();
+        notSelect_by_proId(product_id);
+        for (var count = 1; count <= index ; count++){
+            $('#'+product_id+'-'+count).css('color', '#ffcc00');
+        }
+    });
+    //nha chuot khong danh gia
+    $(document).on('mouseleave', '.rating', function(){
+        $('.text').text('').show();
+        var index = $(this).data('index');
+        var product_id = $(this).data('pro_id');
+        var rating = $(this).data('rating');
+        notSelect_by_proId(product_id);
+        for (var count = 1; count <= rating ; count++){
+            $('#'+product_id+'-'+count).css('color', '#ffcc00');
+        }
+    });
+    $(document).on('click', '.rating', function(){
+        var index = $(this).data('index');
+        // alert(index)
+        var product_id = $(this).data('pro_id');
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+            url: "{{url('add_rating')}}",
+            method: 'post',
+            data: {
+                index:index,
+                product_id:product_id,
+                _token:_token
+            },
+            success:function(data){
+                if(data == 'done'){
+                    alert("Bạn đã đánh giá "+index+" trên 5 sao");
+                    location.reload();
+                }else{
+                    alert('Lỗi đánh giá!');
+                }
+            }
+        });
+    });
+</script> --}}

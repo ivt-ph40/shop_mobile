@@ -71,13 +71,25 @@
 						</tr>
 						@endforeach
 					@endif
-						<td><button type="submit" class="btn btn-success updat_cart">Cập nhật</button></td>
+						<td>
+						@if (Session::get('cart') == null)
+								{{''}}
+						@else
+						<button type="submit" class="btn btn-success updat_cart">Cập nhật</button>
+						@endif
+						</td>
 						<tr class="">
 							<th class="totalPayment_bar" colspan="5">Total Payment</th>
 							<th class="totalPayment_money">
 								{{number_format($totalPayment, 0)}}
 							</th>
-							<th><a href="{{route('cart.delete_all_ajax')}}">Xóa tất cả</a></th>
+							<th><a href="{{route('cart.delete_all_ajax')}}" onclick="return confirm('Are you sure you want to Remove?');">
+								@if (Session::get('cart') == null)
+									{{''}}
+								@else
+								Xóa tất cả
+								@endif
+							</a></th>
 						</tr>
 					</tbody>
 				</table>

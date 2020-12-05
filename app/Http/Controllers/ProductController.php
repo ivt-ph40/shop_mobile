@@ -12,6 +12,7 @@ use Session;
 use App\Comment;
 use Cart;
 use File;
+use App\Rating;
 session_start();
 class ProductController extends Controller
 {
@@ -20,17 +21,17 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function AuthLogin(){
-        $admin_id = Session::get('admin_id');
-        if ($admin_id) {
-            return Redirect()->route('admin.show_dashboard');
-        } else{
-            return Redirect()->route('admin.index')->send();
-        }
-    }
+    // public function AuthLogin(){
+    //     $admin_id = Session::get('id');
+    //     if ($admin_id) {
+    //         return Redirect()->route('admin.show_dashboard');
+    //     } else{
+    //         return Redirect()->route('users.showLoginForm')->send();
+    //     }
+    // }
     public function index()
     {
-        $this->AuthLogin();
+        // $this->AuthLogin();
         // $list_product = DB::table('products')->get();
         $list_product = Product::all();
 
@@ -39,7 +40,7 @@ class ProductController extends Controller
 
     public function add_product()
     {
-        $this->AuthLogin();
+        // $this->AuthLogin();
         $categories = Category::all();
         $list_brand = Brand::all();
         return view('product.add_product')->with('categories', $categories)->with('list_brand', $list_brand);
@@ -47,7 +48,7 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        $this->AuthLogin();
+        // $this->AuthLogin();
         $data = $request->all();
         $data = $request->validate([
             'name' => 'required|min:3',
@@ -83,28 +84,29 @@ class ProductController extends Controller
             return Redirect()->route('product.add_product')->with('message', 'Thêm product thành công!');
         }*/
         //them moi
-        $product_id = DB::table('products')->insertGetId($data);
+        // $product_id = DB::table('products')->insertGetId($data);
+        $products = Product::create($data);
         $data_img['name'] = $new_image;
         $data_img['path'] = $new_image;
-        $data_img['product_id'] = $product_id;
+        $data_img['product_id'] = $products->id;
         Image::create($data_img);
         return Redirect()->route('product.add_product')->with('message', 'Thêm product thành công!');
         //them moi
     }
     public function unactive($id){
-        $this->AuthLogin();
+        // $this->AuthLogin();
         // DB::table('products')->where('id', $id)->update(['status' => 0]);
         Product::where('id', $id)->update(['status' => 0]);
         return Redirect()->route('product.index')-> with('message', 'Ẩn danh mục Product thành công!');
     }
     public function active($id){
-        $this->AuthLogin();
+        // $this->AuthLogin();
         // DB::table('products')->where('id', $id)->update(['status' => 1]);
         Product::where('id', $id)->update(['status' => 1]);
         return Redirect()->route('product.index')-> with('message', 'Hiện danh mục Product thành công!');
     }
     public function delete($id){
-        $this->AuthLogin();
+        // $this->AuthLogin();
         // DB::table('products')->where('id', $id)->delete();
         Product::where('id', $id)->delete();
         return Redirect()->route('product.index')-> with('message', 'Xóa thành công!');
@@ -112,7 +114,7 @@ class ProductController extends Controller
     
     public function edit($id)
     {
-        $this->AuthLogin();
+        // $this->AuthLogin();
         $edit_product = Product::where('id', $id)->first();
         $list_category = Category::all();
         $list_brand = Brand::all();
@@ -121,7 +123,7 @@ class ProductController extends Controller
 
     public function update(Request $request, $id)
     {
-        $this->AuthLogin();
+        // $this->AuthLogin();
         $data =array();
         $data['name']   = $request ->name;
         $data['category_id']   = $request ->category_id;
@@ -150,15 +152,25 @@ class ProductController extends Controller
     }
     public function detail(Request $request, $id)
     {
+        $user_id = Session::get('userId');
+        // dd($user_id);
         $listCategory = Category::where('status', 1)->get();
         $listBrand = Brand::where('status', 1)->get();
         $listProductDetail = Product::with('brand', 'category')->where('id', $id)->first();
         // dd($listProductDetail->toArray());
         //lay images
-        $images = Image::where('product_id', $listProductDetail->id)->get();
-        $category_id = $listProductDetail->category['id'];
-        $relate = DB::table('products')->join('categories', 'categories.id', '=', 'products.category_id')->where('categories.id', $category_id)->whereNotIn('products.id', [$id])->get();
-        
+
+        $images = Image::where('product_id', $id)->get();
+        $category_id = $listProductDetail['category']['id'];
+
+        $relate = DB::table('products')->join('categories', 'categories.id', '=', 'products.category_id')->where('products.category_id', $category_id)->whereNotIn('products.id', [$id])->select('products.*')->get();
+        // dd($relate->toArray());
+        $rating_count = Rating::where('product_id', $listProductDetail->id)->get();
+        $countRT = count($rating_count);
+        // dd($countRT);
+        $rating = Rating::where('product_id', $listProductDetail->id)->avg('rating');
+        $rating = round($rating);
+        // dd($rating);
         /*$quantity = $request->qty;
         $product_info = Product::where('id', $id)->first();
         $cart = Cart::content();
@@ -173,7 +185,7 @@ class ProductController extends Controller
             }
         }*/
 
-        return view('product.product_detail')->with('listCategory', $listCategory)->with('listBrand', $listBrand)->with('listProductDetail', $listProductDetail)->with('relate', $relate)->with('images', $images);
+        return view('product.product_detail')->with('listCategory', $listCategory)->with('listBrand', $listBrand)->with('listProductDetail', $listProductDetail)->with('relate', $relate)->with('images', $images)->with('user_id', $user_id)->with('rating', $rating)->with('countRT', $countRT);
     }
     public function load_comment(Request $request)
     {
@@ -189,18 +201,30 @@ class ProductController extends Controller
                             <div class="col-md-10">
                                 <p style="color:blue">@'.$comm->fullname.'</p>
                                 <p>'.$comm->content.'</p>
+
+                                
+
                             </div>
-                        </div><p></p>';
+                        </div>';
         }
         echo $output;
+
     }
+    public function reply_comment(Request $request)
+    {
+        $output = '';
+        $output = '<textarea name="comment_content" class="comment_content" placeholder="Nội dung bình luận"></textarea>';
+        echo $output;
+    }
+
     public function add_comment(Request $request)
     {
         $user_id = Session::get('userId');
+        $user_name = Session::get('name');
         if ($user_id) {
             $data['user_id'] = $user_id;
             $data['product_id'] = $request->product_id;
-            $data['fullname'] = $request->comment_name;
+            $data['fullname'] = $user_name;
             $data['content'] = $request->comment_content;
             Comment::create($data);
         } else{
@@ -210,5 +234,13 @@ class ProductController extends Controller
             $data['content'] = $request->comment_content;
             Comment::create($data);
         }
+    }
+    public function add_rating(Request $request)
+    {
+        $data['product_id'] = $request->product_id;
+        $data['rating'] = $request->index;
+        Rating::create($data);
+        echo "done";
+
     }
 }

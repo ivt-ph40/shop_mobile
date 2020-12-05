@@ -1,19 +1,20 @@
 @extends('layout')
 @section('content')
 <div class="features_items"><!--features_items-->
-    <h2 class="title text-center">Features Items</h2>
+        <h2 class="title text-center">Kết quả được tìm thấy</h2>
+    
     @foreach ($listSearchs as $products)
-    <a href="{{ URL::to('product_detail/'.$products->id) }}">
+    <a href="{{ route('product.detail', $products->id) }}">
         <div class="col-sm-4">
             <div class="product-image-wrapper"> 
                 <div class="single-products">
-                        <div class="productinfo text-center">
-                            <img src="{{URL::to('upload/product/'.$products->image)}}" height="230px" alt="" />
-                            <h2>${{ number_format($products->price) }}</h2>
-                            <p>{{ $products->name }}</p>
-                            <p>Số lượng: {{ $products->quantity }}</p>
-                            <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-                        </div>
+                    <div class="productinfo text-center">
+                        <img src="{{URL::to('upload/product/'.$products->image)}}" height="230px" alt="" />
+                        <h2>${{ number_format($products->price) }}</h2>
+                        <p>{{ $products->name }}</p>
+                        <p>Số lượng: {{ $products->quantity }}</p>
+                        <a href="{{ route('product.detail', $products->id) }}" class="btn btn-primary">Xem chi tiết</a>
+                    </div>
                 </div>
             </div>
         </div>

@@ -7,56 +7,106 @@
 			<form action="{{ route('order.store') }}" method="POST" role="form">
 				@csrf
 				<legend>Vui lòng điền đầy đủ thông tin để được mua hàng</legend>
-			
-				<div class="form-group">
-					<label for="">Họ tên</label>
-					<input type="text" name="fullname" value="{{ old('fullname') }}" class="form-control" id="" placeholder="Nhập họ tên">
-				</div>
-				<p style="color:red">{{ $errors->first('fullname') }}</p>
-				<div class="form-group">
-					<label for="">Địa chỉ email</label>
-					<input type="email" name="email" value="{{ old('email') }}" class="form-control" id="" placeholder="Nhập email">
-				</div>
-				<p style="color:red">{{ $errors->first('email') }}</p>
-				<div class="form-group">
-					<label for="">Số nhà</label>
-					<input type="text" name="street" class="form-control" id="" placeholder="Nhập số nhà và tên đường">
-				</div>
-				<p style="color:red">{{ $errors->first('street') }}</p>
-				<label for="">Tỉnh/Thành phố</label>
-				<select name="province_id" id="inputProvince_id" class="form-control">
-					<option value="">--Chọn tỉnh/thành phố--</option>
-					@foreach ($provinces as $province)
-						<option value="{{ $province->id }}">{{$province->name}}</option>
-					@endforeach
-				</select>
-				<p style="color:red">{{ $errors->first('province_id') }}</p>
-				<label for="">Huyện/Quận</label>
-				<select name="district_id" id="inputDistrict_id" class="form-control">
-					<option value="">--Chọn huyện/quận--</option>
-				</select>
-				<p style="color:red">{{ $errors->first('district_id') }}</p>
-				<label for="">Xã/phường</label>
-				<select name="ward_id" id="inputWard_id" class="form-control">
-					<option value="">--Chọn xã/phường--</option>
-				</select>
-				<p style="color:red">{{ $errors->first('ward_id') }}</p>
-
-				{{-- <div class="form-group">
-					<select name="status_id" id="inputStatus_id" class="form-control">
-						<option value="">--Chọn trạng thái--</option>
-						@foreach ($listOrderStatus as $orderStatus)
-							<option value="{{ $orderStatus->id }}">{{ $orderStatus->name }}</option>
+				@if (Session::get('userId') != null)
+					<div class="form-group">
+						<label for="">Họ tên</label><span style="color: red"> (* Bắt buộc nhập)</span>
+						<input type="text" name="fullname" value="{{ $users->name }}" class="form-control" id="" placeholder="Nhập họ tên">
+					</div>
+					<p style="color:red">{{ $errors->first('fullname') }}</p>
+					<div class="form-group">
+						<label for="">Địa chỉ email</label><span style="color: red"> (*)</span>
+						<input type="email" name="email" value="{{ $users->email }}" class="form-control" id="" placeholder="Nhập email">
+					</div>
+					<p style="color:red">{{ $errors->first('email') }}</p>
+					<div class="form-group">
+						<label for="">Số nhà</label><span style="color: red"> (*)</span>
+						<input type="text" name="street" class="form-control" id="" placeholder="Nhập số nhà và tên đường" value="{{$users->street}}">
+					</div>
+					<p style="color:red">{{ $errors->first('street') }}</p>
+					<label for="">Tỉnh/Thành phố</label><span style="color: red"> (*)</span>
+					<select name="province_id" id="inputProvince_id" class="form-control">
+						<option value="">--Chọn tỉnh/thành phố--</option>
+						@foreach ($provinces as $province)
+							<option
+							@if ($users->province_id == $province->id)
+								{{'selected'}}
+							@endif
+							 value="{{ $province->id }}">{{$province->name}}</option>
 						@endforeach
 					</select>
-				</div> --}}
-				<p style="color:red">{{ $errors->first('status_id') }}</p>
-				<div class="form-group">
-					<label for="">Số điện thoại</label>
-					<input type="text" name="phone" value="{{ old('phone') }}" class="form-control" id="" placeholder="Nhập số điện thoại">
-				</div>
-				<p style="color:red">{{ $errors->first('phone') }}</p>
-			
+					<p style="color:red">{{ $errors->first('province_id') }}</p>
+					<label for="">Huyện/Quận</label><span style="color: red"> (*)</span>
+					<select name="district_id" id="inputDistrict_id" class="form-control">
+						<option value="">--Chọn huyện/quận--</option>
+						@foreach ($districts as $district)
+							<option
+							@if ($users->district_id == $district->id)
+								{{'selected'}}
+							@endif
+							 value="{{$district->id}}">{{$district->name}}</option>
+						@endforeach
+						
+					</select>
+					<p style="color:red">{{ $errors->first('district_id') }}</p>
+					<label for="">Xã/phường</label><span style="color: red"> (*)</span>
+					<select name="ward_id" id="inputWard_id" class="form-control">
+						<option value="">--Chọn xã/phường--</option>
+						@foreach ($wards as $ward)
+							<option
+							@if ($users->ward_id == $ward->id)
+								{{'selected'}}
+							@endif
+							 value="{{$ward->id}}">{{$ward->name}}</option>
+						@endforeach
+						
+					</select>
+					<p style="color:red">{{ $errors->first('ward_id') }}</p>
+					<div class="form-group">
+						<label for="">Số điện thoại</label><span style="color: red"> (*)</span>
+						<input type="text" name="phone" value="{{ $users->phone }}" class="form-control" id="" placeholder="Nhập số điện thoại">
+					</div>
+					<p style="color:red">{{ $errors->first('phone') }}</p>
+				@else
+				
+					<div class="form-group">
+						<label for="">Họ tên</label><span style="color: red"> (*)</span>
+						<input type="text" name="fullname" value="{{ old('fullname') }}" class="form-control" id="" placeholder="Nhập họ tên">
+					</div>
+					<p style="color:red">{{ $errors->first('fullname') }}</p>
+					<div class="form-group">
+						<label for="">Địa chỉ email</label><span style="color: red"> (*)</span>
+						<input type="email" name="email" value="{{ old('email') }}" class="form-control" id="" placeholder="Nhập email">
+					</div>
+					<p style="color:red">{{ $errors->first('email') }}</p>
+					<div class="form-group">
+						<label for="">Số nhà</label><span style="color: red"> (*)</span>
+						<input type="text" name="street" class="form-control" id="" placeholder="Nhập số nhà và tên đường">
+					</div>
+					<p style="color:red">{{ $errors->first('street') }}</p>
+					<label for="">Tỉnh/Thành phố</label><span style="color: red"> (*)</span>
+					<select name="province_id" id="inputProvince_id" class="form-control">
+						<option value="">--Chọn tỉnh/thành phố--</option>
+						@foreach ($provinces as $province)
+							<option value="{{ $province->id }}">{{$province->name}}</option>
+						@endforeach
+					</select>
+					<p style="color:red">{{ $errors->first('province_id') }}</p>
+					<label for="">Huyện/Quận</label><span style="color: red"> (*)</span>
+					<select name="district_id" id="inputDistrict_id" class="form-control">
+						<option value="">--Chọn huyện/quận--</option>
+					</select>
+					<p style="color:red">{{ $errors->first('district_id') }}</p>
+					<label for="">Xã/phường</label><span style="color: red"> (*)</span>
+					<select name="ward_id" id="inputWard_id" class="form-control">
+						<option value="">--Chọn xã/phường--</option>
+					</select>
+					<p style="color:red">{{ $errors->first('ward_id') }}</p>
+					<div class="form-group">
+						<label for="">Số điện thoại</label><span style="color: red"> (*)</span>
+						<input type="text" name="phone" value="{{ old('phone') }}" class="form-control" id="" placeholder="Nhập số điện thoại">
+					</div>
+					<p style="color:red">{{ $errors->first('phone') }}</p>
+				@endif
 				<button type="submit" class="btn btn-success order_cart" onclick="return confirm('Bạn có chắc muốn đặt hàng?');">Đặt hàng</button>
 			</form>
 		</div>

@@ -34,7 +34,7 @@
                 </div>
                 </a>
             </div>
-        </div> 
+        </div>
     @endforeach 
 </div><!--features_items-->
 

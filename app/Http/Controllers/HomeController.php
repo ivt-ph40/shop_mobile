@@ -44,7 +44,7 @@ class HomeController extends Controller
         $listBrand = Brand::where('status', 1)->get();
         $value_search = $request->search;
         $listSearchs = Product::where('name', 'like', '%'.$value_search.'%')->orWhere('price', 'like', '%'.$value_search.'%')->get();
-        return view('pages.search', compact('listBrand', 'listCategory', 'listSearchs'));
+        return view('pages.search', compact('listBrand', 'listCategory', 'listSearchs', 'value_search'));
     }
 
 

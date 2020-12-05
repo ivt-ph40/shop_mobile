@@ -15,23 +15,26 @@ class AdminController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function AuthLogin(){
-        $admin_id = Session::get('admin_id');
+        $admin_id = Session::get('id');
         if ($admin_id) {
             return Redirect()->route('admin.show_dashboard');
         } else{
-            return Redirect()->route('admin.index')->send();
+            return Redirect()->route('users.showLoginForm')->send();
         }
-    }
-    public function index()
-    {
-        return view('admin_login');
     }
     public function show_dashboard()
     {
         $this->AuthLogin();
         return view('admin.dashboard');
     }
-    public function dashboard(Request $request)
+
+
+    // public function index()
+    // {
+    //     return view('admin_login');
+    // }
+
+    /*public function dashboard(Request $request)
     {
         $admin_email = $request ->admin_email;
         $admin_password = md5($request ->admin_password);
@@ -53,7 +56,7 @@ class AdminController extends Controller
         Session::put('admin_id', null);
         return Redirect()-> route('admin.index');
        
-    }
+    }*/
     /**
      * Show the form for creating a new resource.
      *

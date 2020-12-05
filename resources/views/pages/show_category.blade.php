@@ -1,7 +1,7 @@
 @extends('layout')
 @section('content')
 <div class="features_items"><!--features_items-->
-    <h2 class="title text-center">Features Items</h2>
+    <h2 class="title text-center">Sản phẩm Mobile-Shop</h2>
     @foreach ($category_by_id->products as $product)
     <a href="{{ route('product.detail', $product->id) }}">
         <div class="col-sm-4">
@@ -12,7 +12,7 @@
                             <h2>${{ $product->price }}</h2>
                             <p>{{ $product->name }}</p>
                             <p>Số lượng: {{ $product->quantity }}</p>
-                            <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
+                            <a href="{{ route('product.detail', $product->id) }}" class="btn btn-default add-to-cart">Xem chi tiết</a>
                         </div>
                 </div>
                 {{-- <div class="choose">

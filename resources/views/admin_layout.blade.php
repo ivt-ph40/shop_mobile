@@ -151,6 +151,16 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                         <li><a href="{{route('roles.index')}}">Danh sách vai trò</a></li>
                     </ul>
                 </li>
+                <li class="sub-menu">
+                    <a href="javascript:;">
+                        <i class="fa fa-th"></i>
+                        <span>Quản lý các quyền</span>
+                    </a>
+                    <ul class="sub">
+                        <li><a href="{{route('permission.create')}}">Thêm quyền</a></li>
+                        <li><a href="{{route('permission.index')}}">Danh các quyền</a></li>
+                    </ul>
+                </li>
                 
                 {{-- <li>
                     <a href="login.html">

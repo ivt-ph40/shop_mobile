@@ -29,8 +29,7 @@ class CategoryController extends Controller
     {
         // $this->AuthLogin();
         // $list_category = DB::table('categories')->get();
-        $list_category = Category::all();
-
+        $list_category = Category::paginate(8);
         return view('category.list_category', compact('list_category'));
     }
 

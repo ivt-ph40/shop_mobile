@@ -99,6 +99,19 @@ Route::prefix('product')->group(function(){
 	Route::get('/edit/{id}', 'ProductController@edit')->name('product.edit')->middleware('check.roles:manage_products');
 	Route::post('/update/{id}', 'ProductController@update')->name('product.update')->middleware('check.roles:manage_products');
 });
+//backend (Permission)
+Route::prefix('permission')->group(function(){
+	//thêm permission
+	Route::get('/add-permission', 'PermissionController@create')-> name('permission.create')->middleware('check.roles:manage_permissions');
+	Route::post('/add-permission', 'PermissionController@store')-> name('permission.store')->middleware('check.roles:manage_permissions');
+	//cập nhật permission
+	Route::get('/{id}/edit-permission', 'PermissionController@edit')-> name('permission.edit')->middleware('check.roles:manage_permissions');
+	Route::post('/{id}/update-permission', 'PermissionController@update')-> name('permission.update')->middleware('check.roles:manage_permissions');
+	//xóa permission
+	Route::delete('/{id}/delete-permission', 'PermissionController@destroy')-> name('permission.destroy')->middleware('check.roles:manage_permissions');
+	//danh sách permission
+	Route::get('/', 'PermissionController@index')-> name('permission.index')->middleware('check.roles:manage_permissions');
+});
 
 //MANAGE ORDER IN ADMIN 
 Route::prefix('order')->group(function(){

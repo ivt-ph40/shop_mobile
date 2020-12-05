@@ -82,7 +82,7 @@ class CartController extends Controller
                 
         //     }
         // }else{
-            if ($quantity < 0 || $quantity >10 || !is_numeric($quantity) || $quantity > $quantity_kho) {
+            if ($quantity < 0 || $quantity > 10 || !is_numeric($quantity) || $quantity > $quantity_kho) {
                 return Redirect()->back()->with('message', 'Số lượng hàng còn trong kho không đủ!');
             } else{
                 $carts = Cart::add($data);

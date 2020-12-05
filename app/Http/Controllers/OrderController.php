@@ -17,6 +17,7 @@ use App\OrderDetail;
 use App\Http\Requests\CreateOrderRequest;
 use Session;
 use Cart;
+use App\User;
 use Mail;
 use App\Mail\ShoppingMail;
 session_start();
@@ -105,7 +106,13 @@ class OrderController extends Controller
         // $content = Cart::content();
         // dd(count($content));
         $cart = Session::get('cart');
-        if (count($cart) == 0) {
+        $userId = Session::get('userId');
+        $users = User::where('id', $userId)->first();
+        // $provinceId = $users->province_id;
+        $districts = District::all();
+        $wards = Ward::all();
+        // dd($provinceId);
+        if ($cart == null) {
             return Redirect()->back()->with('message', 'Vui lòng mua hàng trước khi thanh toán!');
         // }
         } else{
@@ -113,7 +120,7 @@ class OrderController extends Controller
             $listBrand = Brand::where('status', 1)->get();
             $listOrderStatus = Order_status::all();
             $provinces = Province::all();
-            return view('orders.order', compact('listCategory', 'listBrand', 'listOrderStatus', 'provinces'));
+            return view('orders.order', compact('listCategory', 'listBrand', 'listOrderStatus', 'provinces', 'users', 'districts', 'wards'));
         }
         
 

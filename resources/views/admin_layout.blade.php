@@ -53,7 +53,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         <!-- user login dropdown start-->
         <li class="dropdown">
             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                <img alt="" src="{{('backend/images/hau.png')}}">
+                @if (Session::get('image'))
+                    <img alt="" src="{{URL::to('upload/users/'.Session::get('image'))}}">
+                @endif
                 <span class="username">
                     @if (Session::get('name'))
                         {{Session::get('name')}}
@@ -62,9 +64,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 <b class="caret"></b>
             </a>
             <ul class="dropdown-menu extended logout">
-                <li><a href="#"><i class=" fa fa-suitcase"></i>Profile</a></li>
-                <li><a href="#"><i class="fa fa-cog"></i> Settings</a></li>
-                <li><a href="{{ route('admin.logout') }}"><i class="fa fa-key"></i> Log Out</a></li>
+                {{-- <li><a href="#"><i class=" fa fa-suitcase"></i>Profile</a></li>
+                <li><a href="#"><i class="fa fa-cog"></i> Settings</a></li> --}}
+                <li><a href="{{ route('users.logout') }}"><i class="fa fa-key"></i>Đăng xuất</a></li>
             </ul>
         </li>
         <!-- user login dropdown end -->
@@ -83,7 +85,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 <li>
                     <a class="" href="{{ route('home.index') }}">
                         <i class="fa fa-dashboard"></i>
-                        <span>Home</span>
+                        <span>Trang chủ</span>
                     </a>
                 </li>
                 <li>
@@ -101,7 +103,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 <li class="sub-menu">
                     <a href="javascript:;">
                         <i class="fa fa-book"></i>
-                        <span>Danh mục Categories</span>
+                        <span>Danh mục thể loại sản phẩm</span>
                     </a>
                     <ul class="sub">
                         <li><a href="{{ route('category.add_category') }}">Thêm danh mục</a></li>
@@ -111,7 +113,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 <li class="sub-menu">
                     <a href="javascript:;">
                         <i class="fa fa-book"></i>
-                        <span>Danh mục Brand</span>
+                        <span>Danh mục thương hiệu</span>
                     </a>
                     <ul class="sub">
 						<li><a href="{{ route('brand.add_brand') }}">Thêm thương hiệu sản phẩm</a></li>
@@ -121,36 +123,36 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 <li class="sub-menu">
                     <a href="javascript:;">
                         <i class="fa fa-book"></i>
-                        <span>Danh mục Product</span>
+                        <span>Danh mục sản phẩm</span>
                     </a>
                     <ul class="sub">
                         <li><a href="{{ route('product.add_product') }}">Thêm sản phẩm</a></li>
                         <li><a href="{{ route('product.index') }}">Liệt kê sản phẩm</a></li>
                     </ul>
                 </li>
-                {{-- <li class="sub-menu">
+                <li class="sub-menu">
                     <a href="javascript:;">
-                        <i class="fa fa-th"></i>
-                        <span>Data Tables</span>
+                        <i class="fa fa-user"></i>
+                        <span>Quản lý người dùng</span>
                     </a>
                     <ul class="sub">
-                        <li><a href="basic_table.html">Basic Table</a></li>
-                        <li><a href="responsive_table.html">Responsive Table</a></li>
+                        <li><a href="{{route('users.create')}}">Thêm người dùng</a></li>
+                        <li><a href="{{route('users.index')}}">Danh sách người dùng</a></li>
                     </ul>
                 </li>
                 
                 <li class="sub-menu">
                     <a href="javascript:;">
-                        <i class="fa fa-envelope"></i>
-                        <span>Mail </span>
+                        <i class="fa fa-th"></i>
+                        <span>Quản lý vai trò</span>
                     </a>
                     <ul class="sub">
-                        <li><a href="mail.html">Inbox</a></li>
-                        <li><a href="mail_compose.html">Compose Mail</a></li>
+                        <li><a href="{{route('roles.create')}}">Thêm vai trò</a></li>
+                        <li><a href="{{route('roles.index')}}">Danh sách vai trò</a></li>
                     </ul>
                 </li>
                 
-                <li>
+                {{-- <li>
                     <a href="login.html">
                         <i class="fa fa-user"></i>
                         <span>Login Page</span>
@@ -373,11 +375,13 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 		});
 	</script>
-    <script src="{{asset('backend/ckeditor/ckeditor.js')}}"></script>
+    {{-- <script src="{{asset('backend/ckeditor/ckeditor.js')}}"></script>
     <script> 
     CKEDITOR.replace('ckeditor1'); 
     CKEDITOR.replace('ckeditor2'); 
-    </script>
+    </script> --}}
+
+    {{-- quản lý order --}}
     <script>
         $('.order_details').change(function(){
             var order_status = $(this).val();
@@ -396,7 +400,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 order_product_id.push($(this).val());
             });
             $.ajax({
-                url : "{{url('/update-order-quantity')}}",
+                url : "{{url('/order/update-order-quantity')}}",
                 method : 'post', 
                 data : {
                     order_status : order_status,

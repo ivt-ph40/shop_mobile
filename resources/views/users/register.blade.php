@@ -105,7 +105,7 @@
 						_token: token
 					},
 					success: function(data) {
-						console.log(data)
+						// console.log(data)
 						$('#inputWard_id').html('');
 						$.each(data, function(key, value){
 							$('#inputWard_id').append(

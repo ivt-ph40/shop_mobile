@@ -41,4 +41,20 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Order');
     }
+    public function roles()
+    {
+        return $this->belongsToMany('App\Role');
+    }
+    public function province()
+    {
+        return $this->belongsTo('App\Province');
+    }
+    public function district()
+    {
+        return $this->belongsTo('App\District');
+    }
+    public function ward()
+    {
+        return $this->belongsTo('App\Ward');
+    }
 }

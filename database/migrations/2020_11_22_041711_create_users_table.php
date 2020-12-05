@@ -28,7 +28,7 @@ class CreateUsersTable extends Migration
             $table->foreign('district_id')->references('id')->on('districts')->onDelete('cascade');
             $table->unsignedBigInteger('ward_id');
             $table->foreign('ward_id')->references('id')->on('wards')->onDelete('cascade');
-            $table->string('image');
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }

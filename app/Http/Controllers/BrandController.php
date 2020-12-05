@@ -11,17 +11,17 @@ session_start();
 
 class BrandController extends Controller
 {
-    public function AuthLogin(){
-        $admin_id = Session::get('admin_id');
-        if ($admin_id) {
-            return Redirect()->route('admin.show_dashboard');
-        } else{
-            return Redirect()->route('admin.index')->send();
-        }
-    }
+    // public function AuthLogin(){
+    //     $admin_id = Session::get('admin_id');
+    //     if ($admin_id) {
+    //         return Redirect()->route('admin.show_dashboard');
+    //     } else{
+    //         return Redirect()->route('users.showLoginForm')->send();
+    //     }
+    // }
     public function index()
     {
-        $this->AuthLogin();
+        // $this->AuthLogin();
         // $list_brand = DB::table('brands')->get();
         $list_brand = Brand::all();
 
@@ -30,13 +30,13 @@ class BrandController extends Controller
 
     public function add_brand()
     {
-        $this->AuthLogin();
+        // $this->AuthLogin();
         return view('brand.add_brand');
     }
 
     public function store(Request $request)
     {
-        $this->AuthLogin();
+        // $this->AuthLogin();
         // $data =array();
         $data = $request->validate([
             'name' => 'required|unique:brands|min:3',
@@ -49,19 +49,19 @@ class BrandController extends Controller
         return Redirect()->route('brand.add_brand')->with('message', 'Thêm brand thành công!');
     }
     public function unactive($id){
-        $this->AuthLogin();
+        // $this->AuthLogin();
         // DB::table('brands')->where('id', $id)->update(['status' => 0]);
         Brand::where('id', $id)->update(['status' => 0]);
         return Redirect()->route('brand.index')-> with('message', 'Ẩn danh mục Category thành công!');
     }
     public function active($id){
-        $this->AuthLogin();
+        // $this->AuthLogin();
         // DB::table('brands')->where('id', $id)->update(['status' => 1]);
         Brand::where('id', $id)->update(['status' => 1]);
         return Redirect()->route('brand.index')-> with('message', 'Hiện danh mục Category thành công!');
     }
     public function delete($id){
-        $this->AuthLogin();
+        // $this->AuthLogin();
         // DB::table('brands')->where('id', $id)->delete();
         Brand::where('id', $id)->delete();
         return Redirect()->route('brand.index')-> with('thongbao', 'Xóa thành công!');
@@ -69,7 +69,7 @@ class BrandController extends Controller
     
     public function edit($id)
     {
-        $this->AuthLogin();
+        // $this->AuthLogin();
         // $edit_brand = DB::table('brands')->where('id', $id)->first();
         $edit_brand = Brand::where('id', $id)->first();
 
@@ -78,7 +78,7 @@ class BrandController extends Controller
 
     public function update(Request $request, $id)
     {
-        $this->AuthLogin();
+        // $this->AuthLogin();
         $data =array();
         $data['name']   = $request ->name;
         $data['description']   = $request ->description;

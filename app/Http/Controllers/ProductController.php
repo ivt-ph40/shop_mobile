@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Product;
 use Illuminate\Http\Request;
+use App\Http\Requests\CreateProductRequest;
 use DB;
 use App\Brand;
 use App\Image;
@@ -46,21 +47,10 @@ class ProductController extends Controller
         return view('product.add_product')->with('categories', $categories)->with('list_brand', $list_brand);
     }
 
-    public function store(Request $request)
+    public function store(CreateProductRequest $request)
     {
         // $this->AuthLogin();
         $data = $request->all();
-        $data = $request->validate([
-            'name' => 'required|min:3',
-            'category_id' => 'required',
-            'brand_id' => 'required',
-            'description' => 'required',
-            'content' => 'required',
-            'quantity' => 'required|numeric',
-            'image' => 'required',
-            'price' => 'required',
-            'status' => 'required'
-        ]);
         $get_image = $request->file('image');
         //them moi
         $path_product = 'upload/product/';
@@ -194,7 +184,7 @@ class ProductController extends Controller
         $comments = Comment::where('product_id', $product_id)->get();
         // dd($comments);
         foreach ($comments as $key => $comm) {
-            $output .= '<div class="comment">
+            $output .= '<div class="col-md-12 comment">
                             <div class="col-md-2">
                                 <img style="width: 60px" src="'.url('frontend/images/icon_person.png').'" class="img-responsive img-thumbnail" alt="">
                             </div>
@@ -202,9 +192,24 @@ class ProductController extends Controller
                                 <p style="color:blue">@'.$comm->fullname.'</p>
                                 <p>'.$comm->content.'</p>
 
+                                <p>
+                                  <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                    Trả lời
+                                  </a>
+                                </p>
+                                <div class="collapse" id="collapseExample">
+                                  <div class="col-md-12">
+                                    <p><b>Viết bình luận</b></p>
+                                        <span><input type="text" placeholder="Nhập tên" class="comment_name" /></span>
+                                        <textarea name="comment_content" class="comment_content" placeholder="Nội dung bình luận"></textarea>
+                                        <button type="button" class="btn btn-default pull-right reply_comment">
+                                            Gửi
+                                        </button>
+                                    </div>
+                                </div>
                                 
-
                             </div>
+
                         </div>';
         }
         echo $output;

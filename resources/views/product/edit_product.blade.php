@@ -54,6 +54,10 @@
                         <input type="text" name="quantity" class="form-control" id="exampleInputName" placeholder="Số lượng sản phẩm" value="{{ $edit_product->quantity }}">
                     </div>
                     <div class="form-group">
+                        <label for="exampleInputDiscount">Giảm giá(%)</label>
+                        <input type="float" name="discount" class="form-control" id="exampleInputDiscount" placeholder="Số lượng sản phẩm" value="{{ $edit_product->discount }}">
+                    </div>
+                    <div class="form-group">
                         <label for="exampleInput">Price</label>
                         <input type="text" name="price" class="form-control" id="exampleInputPrice" placeholder="Giá sản phẩm" value="{{ $edit_product->price }}">
                     </div>

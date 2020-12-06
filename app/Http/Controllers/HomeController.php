@@ -35,8 +35,35 @@ class HomeController extends Controller
         // $meta_canonical = $request->url();
         $listCategory = Category::where('status', 1)->get();
         $listBrand = Brand::where('status', 1)->get();
-        $listProduct = Product::where('status', 1)->paginate(6);
-        return view('pages.home', compact('listCategory', 'listBrand', 'listProduct'/*, 'meta_des', 'meta_keywords', 'meta_title', 'meta_canonical'*/));
+        if (isset($_GET['sort-by'])) {
+            $sort_by = $_GET['sort-by'];
+            if ($sort_by == 'tang-dan') {
+                $listProduct = Product::where('status', 1)->orderby('price', 'ASC')->paginate(6)->appends(request()->query());
+                return view('pages.home', compact('listCategory', 'listBrand', 'listProduct', 'sort_by'));
+            } elseif ($sort_by == 'giam-dan') {
+                $listProduct = Product::where('status', 1)->orderby('price', 'DESC')->paginate(6)->appends(request()->query());
+                return view('pages.home', compact('listCategory', 'listBrand', 'listProduct', 'sort_by'));
+            } elseif ($sort_by == 'san-pham-moi-nhat') {
+                $listProduct = Product::where('status', 1)->orderby('created_at', 'DESC')->paginate(6)->appends(request()->query());
+                return view('pages.home', compact('listCategory', 'listBrand', 'listProduct', 'sort_by'));
+                    
+            }elseif ($sort_by == 'kytu-tu-az') {
+                $listProduct = Product::where('status', 1)->orderby('name', 'ASC')->paginate(6)->appends(request()->query());
+                return view('pages.home', compact('listCategory', 'listBrand', 'listProduct', 'sort_by'));
+            }elseif ($sort_by == 'kytu-tu-za') {
+                $listProduct = Product::where('status', 1)->orderby('name', 'DESC')->paginate(6)->appends(request()->query());
+                return view('pages.home', compact('listCategory', 'listBrand', 'listProduct', 'sort_by'));
+            }elseif ($sort_by == 'none') {
+                $listProduct = Product::where('status', 1)->orderby('price', 'ASC')->paginate(6)->appends(request()->query());
+                return view('pages.home', compact('listCategory', 'listBrand', 'listProduct', 'sort_by'));
+            }elseif ($sort_by == 'san-pham-giam-gia') {
+                $listProduct = Product::where('status', 1)->orderby('discount', 'DESC')->paginate(6)->appends(request()->query());
+                return view('pages.home', compact('listCategory', 'listBrand', 'listProduct', 'sort_by'));
+            }
+        }else{
+        $listProduct = Product::where('status', 1)->orderby('price', 'ASC')->paginate(6);
+    return view('pages.home', compact('listCategory', 'listBrand', 'listProduct'/*, 'meta_des', 'meta_keywords', 'meta_title', 'meta_canonical'*/));
+        }
     }
     public function search(Request $request)
     {

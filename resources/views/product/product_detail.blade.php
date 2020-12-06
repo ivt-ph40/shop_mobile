@@ -69,6 +69,16 @@
 	#aaa{
 		margin-top: -25px;
 	}
+	#hot{
+        width: 80px;
+        height: 80px;
+        margin-top: -500px;
+        margin-left: 175px;
+    }
+    #sale{
+        color: #999966;
+        margin-right: 10px;
+    }
 </style>
 {{-- @foreach ($listProductDetail as $productDetail) --}}
 	<div class="product-details"><!--product-details-->
@@ -99,11 +109,21 @@
 				<form action="" method="post">
 					@csrf
 					<span>
-						<span>${{number_format($listProductDetail->price)}}</span>
+						@if ($listProductDetail->discount == 0)
+							<span>${{number_format($listProductDetail->price)}}</span>
+						@else
+							<span style="color:#999966"><del>${{number_format($listProductDetail->price)}}</del></span>
+							<span>${{number_format($listProductDetail->price*(100-$listProductDetail->discount)/100)}}</span>
+						@endif
+						
 						<label>Quantity:</label>
 						<input type="hidden" name="product_id_hidden" class="product_id" value="{{$listProductDetail->id}}">
 						<input type="hidden" name="product_name" class="product_name" value="{{$listProductDetail->name}}">
-						<input type="hidden" name="product_price" class="product_price" value="{{$listProductDetail->price}}">
+						@if ($listProductDetail->discount == 0)
+							<input type="hidden" name="product_price" class="product_price" value="{{$listProductDetail->price}}">
+						@else
+							<input type="hidden" name="product_price" class="product_price" value="{{$listProductDetail->price*(100-$listProductDetail->discount)/100}}">
+						@endif
 						<input type="hidden" name="quantity_kho" class="quantity_kho" value="{{$listProductDetail->quantity}}">
 						<input type="number" name="product_qty" class="product_qty" value="1" />
 						<input type="hidden" name="product_image" class="product_image" value="{{$listProductDetail->image}}">
@@ -130,8 +150,8 @@
 			<ul class="nav nav-tabs">
 				<li><a href="#details" data-toggle="tab">Thông tin chi tiết</a></li>
 				<li><a href="#companyprofile" data-toggle="tab">Mô tả</a></li>
-				<li><a href="#reviews" data-toggle="tab">Bình luận</a></li>
-				<li class="active"><a href="#comments" data-toggle="tab">Đánh giá</a></li>
+				<li class="active"><a href="#reviews" data-toggle="tab">Bình luận</a></li>
+				<li ><a href="#comments" data-toggle="tab">Đánh giá</a></li>
 			</ul>
 		</div>
 		<div class="tab-content">
@@ -161,7 +181,7 @@
 				</div>
 				
 			</div>
-			<div class="tab-pane fade" id="reviews" >
+			<div class="tab-pane fade fade active in" id="reviews" >
 				<div class="col-sm-12">
 					<ul>
 						<li><a href=""><i class="fa fa-user"></i>haupham</a></li>
@@ -179,7 +199,6 @@
 
 							<div class="col-md-10">
 								<p style="color:blue">@haupham</p>
-								<p>Video này mình hướng dẫn các bạn comment bằng ajax nhé .Nhớ subs kênh để theo dõi video hướng dẫn lập trình website nhé.</p>
 							</div>
 						</div><p></p> --}}
 						{{-- <input type="button" value="Trả lời" class="button_rep">
@@ -230,7 +249,7 @@
 					</form>
 				</div>
 			</div>
-			<div class="tab-pane fade fade active in" id="comments" >
+			<div class="tab-pane fade" id="comments" >
 				<div class="col-sm-12">
 					<form action="#" method="post">
 						@csrf
@@ -329,7 +348,16 @@
 									<div class="single-products">
 										<div class="productinfo text-center">
 											<img src="{{URL::to('upload/product/'.$product->image)}}" alt="" height="250px" />
-											<h2>${{number_format($product->price)}}</h2>
+											@if ($product->discount == 0)
+												<h2>${{number_format($product->price)}}</h2>
+											@else
+												<h2>
+				                                    <span id="sale"><del>${{ number_format($product->price) }}</del></span>
+				                                    <span>${{ number_format($product->price*(100 - $product->discount)/100) }}</span>
+			                                    </h2>
+			                                    <img id="hot" src="{{asset('frontend/images/hot.gif')}}" alt="">
+											@endif
+											
 											<p>{{$product->name}}</p>
 											<button type="button" class="btn btn-primary"></i>Xem chi tiết</button>
 										</div>

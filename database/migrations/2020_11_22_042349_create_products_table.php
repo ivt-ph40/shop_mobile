@@ -26,6 +26,7 @@ class CreateProductsTable extends Migration
             $table->integer('sold')->default(0);
             $table->string('image');
             $table->float('price');
+            $table->float('discount')->default(0);
             $table->boolean('status');
             $table->timestamps();
         });

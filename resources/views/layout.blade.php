@@ -650,6 +650,21 @@ function showCategories($categories, $parent_id = 0, $char = '')
   });
 </script>
 
+{{-- Sort sản phẩm --}}
+<script>
+    $(document).ready(function(){
+        $('#sort').change(function(){
+            var url = $(this).val();
+            if(url){
+                window.location = url;
+            }
+            return false;
+        });
+    });
+</script>
+{{-- Sort sản phẩm --}}
+
+
 {{-- TAO COMMENT SP --}}
 <script type="text/javascript">
     $(document).ready(function(){
@@ -694,9 +709,9 @@ function showCategories($categories, $parent_id = 0, $char = '')
                 }
             });
         });
-        $('.rep_comment').click(function(){
-            $('.content_rep').html();
-        })
+        $(document).on('click', '.reply', function(){
+            
+        });
     });
 </script>
 {{-- TAO COMMENT SP --}}

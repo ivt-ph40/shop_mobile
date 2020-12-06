@@ -23,6 +23,7 @@
             <th>Mô tả</th>
             {{-- <th>Nội dung</th> --}}
             <th>Số lượng</th>
+            <th>Giảm giá(%)</th>
             <th>Hình ảnh</th>
             <th>Trạng thái</th>  
             <th colspan="2">Action</th>
@@ -39,6 +40,7 @@
               <td><span class="text-ellipsis">{{ $product->description }}</span></td>
               {{-- <td><span class="text-ellipsis">{{ $product->content }}</span></td> --}}
               <td><span class="text-ellipsis">{{ $product->quantity }}</span></td>
+              <td><span class="text-ellipsis">{{ $product->discount }}</span></td>
               <td><img src="upload/product/{{ $product->image }}" height="40px" alt=""></td>
               
               <td><span class="text-ellipsis">

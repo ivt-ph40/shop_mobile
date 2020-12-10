@@ -163,7 +163,7 @@ class ProductController extends Controller
                                 <p style="color:blue">@'.$comm->fullname.'</p>
                                 <p>'.$comm->content.'</p>
 
-                                <button type="button" id="'.$comm->id.'" class="btn btn-success reply">Trả lời</button>
+                                
                                 
                             </div>
 

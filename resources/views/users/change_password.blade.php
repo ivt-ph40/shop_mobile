@@ -3,7 +3,7 @@
 	<div class="col-md-12">
 		<form action="{{route('users.change_password', Session::get('id'))}}" method="POST" role="form">
 			@csrf
-			<legend>Thay đổi mật khẩu</legend>
+			<legend align="center" style="color:#9b0205">Thay đổi mật khẩu</legend>
 			@if (session()->has('message'))
 				<p style="color: red">{{session()->get('message')}}</p>
 			@endif
@@ -23,7 +23,15 @@
 			</div>
 			<p style="color:red">{{$errors->first('password_confirmation')}}</p>
 		
-			<button type="submit" class="btn btn-primary">Thay đổi</button>
+			{{-- <button type="submit" class="btn btn-primary">Thay đổi</button> --}}
+			<div class="col-md-12">
+				<div class="col-md-6">
+					<button type="submit" class="btn btn-primary">Thay đổi</button>
+				</div>
+				<div class="col-md-6">
+					<button class="btn btn-success" style="margin-top: 15px;"><a id="thoat" href="{{route('users.show_profile')}}">Thoát</a></button>
+				</div>
+			</div>
 		</form>
 	</div>
 @endsection

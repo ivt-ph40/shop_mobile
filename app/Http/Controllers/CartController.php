@@ -18,33 +18,15 @@ class CartController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {   
-        // $cart = Cart::add('293ad', 'Product 1', 1, 9.99, 550);
-        // dd($cart);
-        
-        $listCategory = Category::where('status', 1)->get();
-        $listBrand = Brand::where('status', 1)->get();
+    {
         $content = Cart::content();
         $totalPayment = $this->subtotal($content);
-        return view('cart.show_cart', compact('listCategory', 'listBrand', 'totalPayment'));
+        return view('cart.show_cart', compact('totalPayment'));
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         //
     }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $product_id = $request->product_id_hidden;
@@ -110,13 +92,6 @@ class CartController extends Controller
         // return Redirect()->route('cart.index');
             
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         //
@@ -136,6 +111,10 @@ class CartController extends Controller
             return Redirect()->back();
         }
     }
+
+
+
+    //TẤT CẢ CÁC FUNCTION CART AJAX
     public function add_by_ajax(Request $request)
     {
         $data = $request->all();
@@ -182,18 +161,13 @@ class CartController extends Controller
     public function giohang()
     {
         $cart = Session::get('cart');
-        // dd($cart);
         if ($cart) {
             $totalPayment = $this->subtotal($cart);
             // dd($totalPayment);
         }else{
             $totalPayment = 0;
         }
-        // dd($totalPayment);
-        $listCategory = Category::where('status', 1)->get();
-        $listBrand = Brand::where('status', 1)->get();
-        // $totalPayment = $this->subtotal($content);
-        return view('cart.cart_ajax', compact('listCategory', 'listBrand', 'totalPayment'));
+        return view('cart.cart_ajax', compact('totalPayment'));
     }
     public function delete_ajax($session_id)
     {
@@ -224,7 +198,6 @@ class CartController extends Controller
                     {
                         if ($qty <= 0) {
                             unset($cart[$key2]);
-                            $message = '<p style="color:green">Cập nhật số lượng: '.$cart[$key2]['name'].' thành công!</p>';
                         }else{
                             $cart[$key2]['quantity'] = $qty;
                             $message = '<p style="color:green">Cập nhật số lượng: '.$cart[$key2]['name'].' thành công!</p>';
@@ -232,9 +205,6 @@ class CartController extends Controller
                     } elseif (($val['session_id'] == $key1 && $qty > $cart[$key2]['quantity_kho']) || ($val['session_id'] == $key1 && $qty > 10)) {
                         $message = '<p style="color:red">Cập nhật số lượng: '.$cart[$key2]['name'].' thất bại do lớn hơn số lượng trong kho hoặc lớn hơn số lượng cho phép là 10 hoặc lớn hơn số lượng hiện có!</p>';
                     }
-                    // elseif ($val['session_id'] == $key1 && $qty > $cart[$key2]['quantity_kho']) {
-                    //     $message = '<p style="color:red">Cập nhật số lượng: '.$cart[$key2]['name'].' thất bại do vượt quá số lượng trong kho!</p>';
-                    // }
                 }
             }
             Session::put('cart', $cart);

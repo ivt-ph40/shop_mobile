@@ -15,25 +15,11 @@ use Cart;
 use File;
 use App\Rating;
 session_start();
+
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    // public function AuthLogin(){
-    //     $admin_id = Session::get('id');
-    //     if ($admin_id) {
-    //         return Redirect()->route('admin.show_dashboard');
-    //     } else{
-    //         return Redirect()->route('users.showLoginForm')->send();
-    //     }
-    // }
     public function index()
     {
-        // $this->AuthLogin();
-        // $list_product = DB::table('products')->get();
         $list_product = Product::paginate(6);
 
         return view('product.list_product')->with('list_product', $list_product);
@@ -41,7 +27,6 @@ class ProductController extends Controller
 
     public function add_product()
     {
-        // $this->AuthLogin();
         $categories = Category::all();
         $list_brand = Brand::all();
         return view('product.add_product')->with('categories', $categories)->with('list_brand', $list_brand);
@@ -49,7 +34,6 @@ class ProductController extends Controller
 
     public function store(CreateProductRequest $request)
     {
-        // $this->AuthLogin();
         $data = $request->all();
         $get_image = $request->file('image');
         //them moi
@@ -84,27 +68,20 @@ class ProductController extends Controller
         //them moi
     }
     public function unactive($id){
-        // $this->AuthLogin();
-        // DB::table('products')->where('id', $id)->update(['status' => 0]);
         Product::where('id', $id)->update(['status' => 0]);
         return Redirect()->route('product.index')-> with('message', 'Ẩn danh mục Product thành công!');
     }
     public function active($id){
-        // $this->AuthLogin();
-        // DB::table('products')->where('id', $id)->update(['status' => 1]);
         Product::where('id', $id)->update(['status' => 1]);
         return Redirect()->route('product.index')-> with('message', 'Hiện danh mục Product thành công!');
     }
     public function delete($id){
-        // $this->AuthLogin();
-        // DB::table('products')->where('id', $id)->delete();
         Product::where('id', $id)->delete();
         return Redirect()->route('product.index')-> with('message', 'Xóa thành công!');
     }
     
     public function edit($id)
     {
-        // $this->AuthLogin();
         $edit_product = Product::where('id', $id)->first();
         $list_category = Category::all();
         $list_brand = Brand::all();
@@ -113,7 +90,6 @@ class ProductController extends Controller
 
     public function update(Request $request, $id)
     {
-        // $this->AuthLogin();
         $data =array();
         $data['name']   = $request ->name;
         $data['category_id']   = $request ->category_id;
@@ -122,7 +98,6 @@ class ProductController extends Controller
         $data['content']   = $request ->content;
         $data['quantity']   = $request ->quantity;
         $data['price']   = $request ->price;
-        // $data = $request->except('_token', '_method');
         $get_image = $request->file('image');
         if($get_image){
             $get_name_image = $get_image->getClientOriginalName();
@@ -130,12 +105,10 @@ class ProductController extends Controller
             $new_image = $name_image.rand(0,99).'.'.$get_image->getClientOriginalExtension();
             $get_image->move('upload/product', $new_image);
             $data['image'] = $new_image;
-            // DB::table('products')->where('id', $id)->update($data);
             Product::where('id', $id)->update($data);
             return Redirect()->route('product.index')->with('message', 'Cập nhật thành công!');
         } else{
             $data['image'] = $request->old_product_image;
-            // DB::table('products')->where('id', $id)->update($data);
             Product::where('id', $id)->update($data);
             return Redirect()->route('product.index')->with('message', 'Cập nhật thành công!');
         }
@@ -144,8 +117,6 @@ class ProductController extends Controller
     {
         $user_id = Session::get('userId');
         // dd($user_id);
-        $listCategory = Category::where('status', 1)->get();
-        $listBrand = Brand::where('status', 1)->get();
         $listProductDetail = Product::with('brand', 'category')->where('id', $id)->first();
         // dd($listProductDetail->toArray());
         //lay images
@@ -175,7 +146,7 @@ class ProductController extends Controller
             }
         }*/
 
-        return view('product.product_detail')->with('listCategory', $listCategory)->with('listBrand', $listBrand)->with('listProductDetail', $listProductDetail)->with('relate', $relate)->with('images', $images)->with('user_id', $user_id)->with('rating', $rating)->with('countRT', $countRT);
+        return view('product.product_detail')->with('listProductDetail', $listProductDetail)->with('relate', $relate)->with('images', $images)->with('user_id', $user_id)->with('rating', $rating)->with('countRT', $countRT);
     }
     public function load_comment(Request $request)
     {
@@ -192,21 +163,7 @@ class ProductController extends Controller
                                 <p style="color:blue">@'.$comm->fullname.'</p>
                                 <p>'.$comm->content.'</p>
 
-                                <p>
-                                  <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                                    Trả lời
-                                  </a>
-                                </p>
-                                <div class="collapse" id="collapseExample">
-                                  <div class="col-md-12">
-                                    <p><b>Viết bình luận</b></p>
-                                        <span><input type="text" placeholder="Nhập tên" class="comment_name" /></span>
-                                        <textarea name="comment_content" class="comment_content" placeholder="Nội dung bình luận"></textarea>
-                                        <button type="button" class="btn btn-default pull-right reply_comment">
-                                            Gửi
-                                        </button>
-                                    </div>
-                                </div>
+                                <button type="button" id="'.$comm->id.'" class="btn btn-success reply">Trả lời</button>
                                 
                             </div>
 
@@ -217,9 +174,23 @@ class ProductController extends Controller
     }
     public function reply_comment(Request $request)
     {
-        $output = '';
-        $output = '<textarea name="comment_content" class="comment_content" placeholder="Nội dung bình luận"></textarea>';
-        echo $output;
+        $user_id = Session::get('userId');
+        $user_name = Session::get('name');
+        if ($user_id) {
+            $data['user_id'] = $user_id;
+            $data['product_id'] = $request->product_id;
+            $data['fullname'] = $user_name;
+            $data['content'] = $request->comment_content;
+            $data['parent_id'] = $request->parent_comment_id;
+            Comment::create($data);
+        } else{
+            $data['user_id'] = null;
+            $data['product_id'] = $request->product_id;
+            $data['fullname'] = $request->comment_name;
+            $data['content'] = $request->comment_content;
+            $data['parent_id'] = $request->parent_comment_id;
+            Comment::create($data);
+        }
     }
 
     public function add_comment(Request $request)

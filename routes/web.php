@@ -198,7 +198,7 @@ Route::post('/load_comment', 'ProductController@load_comment')->name('comment.lo
 //add comment
 Route::post('/add_comment', 'ProductController@add_comment')->name('comment.add_comment');
 //reply comment
-Route::get('/reply_comment', 'ProductController@reply_comment')->name('comment.reply_comment');
+Route::post('/reply_comment', 'ProductController@reply_comment')->name('comment.reply_comment');
 //add đánh giá
 Route::post('/add_rating', 'ProductController@add_rating')->name('rating.add_rating');
 

@@ -10,7 +10,7 @@
     <meta name="title" content="Mobileshop.com | Điện thoại, Laptop, Tablet, Phụ kiện chính hãng giá tốt nhất">
     <link rel="canonical" href="http://mobileshop.com"/>
     {{-- <meta name="csrf-token" content="{{ csrf_token() }}">​ --}}
-    <title>Mobile-Shopper</title>
+    <title>Công nghệ - Shop</title>
     <link href="{{ asset('frontend/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('frontend/css/font-awesome.min.css') }}" rel="stylesheet">
     <link href="{{ asset('frontend/css/prettyPhoto.css') }}" rel="stylesheet">
@@ -29,20 +29,28 @@
     <script src="js/html5shiv.js"></script>
     <script src="js/respond.min.js"></script>
     <![endif]-->       
-    <link rel="icon" href="{{asset('frontend/images/shop.jpg')}}">
+    <link rel="icon" href="{{asset('frontend/images/Logo4-1.png')}}">
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="images/ico/apple-touch-icon-144-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/ico/apple-touch-icon-114-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="frontend/images/ico/apple-touch-icon-57-precomposed.png">
     <style>
-        #img_hau{
-            width: 20px;
-            height: 25px;
-            border-radius: 50%;
-        }
-        .left-sidebar h2, .brands_products h2 {
-            color: #3f0ffe;
-        }
+        #img_hau{width: 20px; height: 25px; border-radius: 50%;}
+        .left-sidebar h2, .brands_products h2 {color: #3f0ffe;}
+        .shop-menu ul li a {color: #054b02; font-size: 16px; margin-top: 57px;font-weight: bold;}
+
+        .header-middle .container .row {border-bottom: 7px solid #9b0205;}
+        .fa-plus {color: #054b02;}
+        .category-products .panel-default .panel-heading .panel-title a {color: #9b0205;}
+        .panel-body ul li a {color: #0b7094;}
+        .brands-name .nav-stacked li a {background-color: #decccc; color: #9b0205;}
+        .category-products {background: #decccc;}
+        .category-products .panel-default .panel-heading {background-color: #decccc;}
+        .item h1 span {color: #074b04;}
+        .item h1 {color: #9b0205;}
+        .left-sidebar h2, .brands_products h2 {color: #054b02;}
+        .companyinfo h2 span {color: #11540e;}
+        .companyinfo h2 {color: #9b0205;}
     </style>
 </head><!--/head-->
 
@@ -54,8 +62,8 @@
                     <div class="col-sm-6">
                         <div class="contactinfo">
                             <ul class="nav nav-pills">
-                                <li><a href="#"><i class="fa fa-phone"></i> +2 95 01 88 821</a></li>
-                                <li><a href="#"><i class="fa fa-envelope"></i> info@domain.com</a></li>
+                                <li><a href="#"><i class="fa fa-phone"></i> +0972 912 878</a></li>
+                                <li><a href="#"><i class="fa fa-envelope"></i> vanhauqld45@gmail.com</a></li>
                             </ul>
                         </div>
                     </div>
@@ -79,20 +87,20 @@
                 <div class="row">
                     <div class="col-sm-4">
                         <div class="logo pull-left">
-                            <a href="{{ route('home.index') }}"><img id="img_a" src="{{asset('frontend/images/logo.png')}}" alt="" /></a>
+                            <a href="{{ route('home.index') }}"><img id="img_a" src="{{asset('frontend/images/Logo4-1.png')}}" alt="" /></a>
                         </div>
                     </div>
                     <div class="col-sm-8">
                         <div class="shop-menu pull-right">
                             <ul class="nav navbar-nav">
-                                <li><a href="
-                                    @if (Session::get('id'))
-                                        {{route('admin.show_dashboard')}}
+                                @if (Session::get('id'))
+                                    @if (count(Session::get('role_id')))
+                                        <li><a href="{{route('admin.show_dashboard')}}"><i class="fas fa-user-cog"></i>Quản trị viên</a></li>
                                     @else
-                                        {{route('users.showLoginForm')}}
+                                        {{''}}
                                     @endif
-                                    "><i class="fas fa-user-cog"></i>Quản trị viên</a></li>
-                                <li><a href="{{route('users.showLoginForm')}}"><i class="fa fa-user"></i> Tài khoản</a></li>
+                                @endif
+                                
                                 <li><a href="#"><i class="fa fa-star"></i>Yêu thích</a></li>
                                 <li><a href="{{route('users.showLoginForm')}}"><i class="fa fa-crosshairs"></i>Thanh toán</a></li>
                                 <li><a href="{{route('cart.giohang')}}"><i class="fa fa-shopping-cart"></i>Giỏ hàng</a></li>
@@ -167,6 +175,7 @@
                         </div>
                     </div>
                     <form action="{{route('home.search')}}" method="post">
+                        {{-- @method('get') --}}
                         @csrf
                         <div class="col-sm-5">
                             <div class="search_box pull-right">
@@ -199,40 +208,37 @@
                         
                         <div class="carousel-inner">
                             <div class="item active">
-                                {{-- <div class="col-sm-6">
-                                    <h1><span>Mobile</span>-CITY</h1>
-                                    <h2>Thỏa sức kết nối cùng đam mê</h2>
-                                    <h4>Giá cả siêu sẽ, siêu bất ngờ!</h4>
-                                    <button type="button" class="btn btn-default get">Đi thôi!</button>
-                                </div> --}}
-                                <div class="col-sm-12">
-                                    <img src="{{asset('frontend/images/quangcao2.jpg')}}" class="girl img-responsive" alt="" />
+                                <div class="col-sm-6">
+                                    <img src="{{asset('frontend/images/tri-tue-nhan-tao2.jpg')}}" class="girl img-responsive" alt="" />
                                     {{-- <img src="{{('frontend/images/bigsale.png')}}"  class="pricing" alt="" /> --}}
                                 </div>
+                                <div class="col-sm-6">
+                                    <h1><span>CÔNG NGHỆ</span>-SHOP</h1>
+                                    <h2>Thỏa sức kết nối cùng đam mê</h2>
+                                    <h4>Giá cả siêu sẽ, siêu bất ngờ!</h4>
+                                    {{-- <button type="button" class="btn btn-default get">Đi thôi!</button> --}}
+                                </div>
+                                
                             </div>
                             <div class="item">
-                                {{-- <div class="col-sm-6">
-                                    <h1><span>Mobile</span>-CITY</h1>
+                                <div class="col-sm-6">
+                                    <img src="{{asset('frontend/images/tri-tue-nhan-tao.jpg')}}" class="girl img-responsive" alt="" />
+                                </div>
+                                <div class="col-sm-6">
+                                    <h1><span>CÔNG NGHỆ</span>-SHOP</h1>
                                     <h2>100% Hàng chính hãng</h2>
                                     <h4>Mua sắm thả ga không lo về giá!</h4>
-                                    <button type="button" class="btn btn-default get">Đi thôi!</button>
-                                </div> --}}
-                                <div class="col-sm-12">
-                                    <img src="{{asset('frontend/images/quangcao3.jpg')}}" class="girl img-responsive" alt="" />
-                                    {{-- <img src="{{('frontend/images/bigsale.png')}}"  class="pricing" alt="" /> --}}
                                 </div>
                             </div>
                             
                             <div class="item">
-                                {{-- <div class="col-sm-6">
-                                    <h1><span>Mobile</span>-CITY</h1>
+                                <div class="col-sm-6">
+                                    <img src="{{asset('frontend/images/slide1.jpg')}}" class="girl img-responsive" alt="" />
+                                </div>
+                                <div class="col-sm-6">
+                                    <h1><span>CÔNG NGHỆ</span>-SHOP</h1>
                                     <h2>Mau đi nào!</h2>
                                     <h4>Hãy đến ngay với chúng tôi. Bạn còn chần chờ gì nữa!</h4>
-                                    <button type="button" class="btn btn-default get">Đi thôi!</button>
-                                </div> --}}
-                                <div class="col-sm-12">
-                                    <img src="{{asset('frontend/images/quangcao4.jpg')}}" class="girl img-responsive" alt="" />
-                                    {{-- <img src="{{('frontend/images/bigsale.png')}}" class="pricing" alt="" /> --}}
                                 </div>
                             </div>
                             
@@ -330,8 +336,8 @@
                 <div class="row">
                     <div class="col-sm-2">
                         <div class="companyinfo">
-                            <h2><span>Mobile</span>-shopper</h2>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit,sed do eiusmod tempor</p>
+                            <h2><span>Công nghệ</span>-shop</h2>
+                            <p>Địa chỉ: 92 Quang Trung, Q. Hải Châu, TP. Đà Nẵng - Điện thoại : 02363 888 279</p>
                         </div>
                     </div>
                     <div class="col-sm-7">
@@ -405,76 +411,12 @@
             </div>
         </div>
         
-        <div class="footer-widget">
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-2">
-                        <div class="single-widget">
-                            <h2>Service</h2>
-                            <ul class="nav nav-pills nav-stacked">
-                                <li><a href="#">Online Help</a></li>
-                                <li><a href="#">Contact Us</a></li>
-                                <li><a href="#">Order Status</a></li>
-                                <li><a href="#">Change Location</a></li>
-                                <li><a href="#">FAQ’s</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="single-widget">
-                            <h2>Quock Shop</h2>
-                            <ul class="nav nav-pills nav-stacked">
-                                <li><a href="#">T-Shirt</a></li>
-                                <li><a href="#">Mens</a></li>
-                                <li><a href="#">Womens</a></li>
-                                <li><a href="#">Gift Cards</a></li>
-                                <li><a href="#">Shoes</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="single-widget">
-                            <h2>Policies</h2>
-                            <ul class="nav nav-pills nav-stacked">
-                                <li><a href="#">Terms of Use</a></li>
-                                <li><a href="#">Privecy Policy</a></li>
-                                <li><a href="#">Refund Policy</a></li>
-                                <li><a href="#">Billing System</a></li>
-                                <li><a href="#">Ticket System</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="single-widget">
-                            <h2>About Shopper</h2>
-                            <ul class="nav nav-pills nav-stacked">
-                                <li><a href="#">Company Information</a></li>
-                                <li><a href="#">Careers</a></li>
-                                <li><a href="#">Store Location</a></li>
-                                <li><a href="#">Affillate Program</a></li>
-                                <li><a href="#">Copyright</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-sm-3 col-sm-offset-1">
-                        <div class="single-widget">
-                            <h2>About Shopper</h2>
-                            <form action="#" class="searchform">
-                                <input type="text" placeholder="Your email address" />
-                                <button type="submit" class="btn btn-default"><i class="fa fa-arrow-circle-o-right"></i></button>
-                                <p>Get the most recent updates from <br />our site and be updated your self...</p>
-                            </form>
-                        </div>
-                    </div>
-                    
-                </div>
-            </div>
-        </div>
+        
         
         <div class="footer-bottom">
             <div class="container">
                 <div class="row">
-                    <p class="pull-left">Copyright © 2013 E-SHOPPER Inc. All rights reserved.</p>
+                    <p class="pull-left">Copyright © 2020 CÔNG NGHỆ-SHOP Inc. All rights reserved.</p>
                     <p class="pull-right">Designed by <span><a target="_blank" href="http://www.themeum.com">Themeum</a></span></p>
                 </div>
             </div>
@@ -709,9 +651,30 @@ function showCategories($categories, $parent_id = 0, $char = '')
                 }
             });
         });
-        $(document).on('click', '.reply', function(){
-            
-        });
+        /*$(document).on('click', '.reply', function(){
+            var parent_comment_id = $(this).attr('id');
+            var product_id = $('.com_product_id').val();
+            var comment_name = $('.comment_name').val();
+            var comment_content = $('.comment_content').val();
+            var user_id = $('.userId').val();
+            var _token = $('input[name="_token"]').val();
+            $('.comment_content').focus();
+            $.ajax({
+                url: '{{url("/reply_comment")}}',
+                method: 'post',
+                data: {
+                    parent_comment_id:parent_comment_id,
+                    product_id:product_id,
+                    comment_name:comment_name,
+                    comment_content:comment_content,
+                    _token:_token
+                },
+                success:function(data){
+                    $('.notify').html('<p class="text-danger" style="color:red">Thêm bình luận thành công!</p>');
+                }
+            });
+
+        });*/
     });
 </script>
 {{-- TAO COMMENT SP --}}

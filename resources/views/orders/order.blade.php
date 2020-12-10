@@ -107,6 +107,13 @@
 					</div>
 					<p style="color:red">{{ $errors->first('phone') }}</p>
 				@endif
+				{{-- note --}}
+				@foreach ($cart as $cat)
+				
+				<input type="hidden" name="product_qty_pr[]" class="product_qty_pr" value="{{ $cat['quantity'] }}">
+                <input type="hidden" name="order_product_id_pr[]" class="order_product_id_pr" value="{{$cat['product_id']}}">
+                @endforeach
+                {{-- note --}}
 				<button type="submit" class="btn btn-success order_cart" onclick="return confirm('Bạn có chắc muốn đặt hàng?');">Đặt hàng</button>
 			</form>
 		</div>

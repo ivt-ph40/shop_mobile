@@ -42,7 +42,7 @@
                         <input type="email" name="email" placeholder="Nhập email" class="form-control add_user" value="{{$users->email}}"/>
                         <p style="color: red">{{ $errors->first('email') }}</p>
                         <label for="">Mật khẩu</label><span style="color: red"> (*)</span>
-                        <input type="password" name="password" placeholder="Nhập mật khẩu" class="form-control add_user" value="{{$users->password}}"/>
+                        <input type="password" name="password" placeholder="Nhập mật khẩu" class="form-control add_user" value="{{old('password')}}"/>
                         <p style="color: red">{{ $errors->first('password') }}</p>
                         <label for="">Ngày sinh</label><span style="color: red"> (*)</span>
                         <input type="date" name="birthday" placeholder="Nhập ngày sinh" class="form-control add_user" value="{{$users->birthday}}"/>
@@ -114,7 +114,7 @@
                             @endforeach
                         </select>
 
-                        <button type="submit" class="btn btn-primary">Thêm</button>
+                        <button type="submit" class="btn btn-primary">Cập nhật</button>
 
                     </form>
                 </div><!--/sign up form-->

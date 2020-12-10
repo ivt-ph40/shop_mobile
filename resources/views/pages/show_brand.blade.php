@@ -14,9 +14,12 @@
     #tag_product{
         height: 430px;
     }
+    h2.title {
+        color: #054b02;
+    }
 </style>
 <div class="features_items"><!--features_items-->
-    <h2 class="title text-center">Sản phẩm Mobile-Shop</h2>
+    <h2 class="title text-center">Sản phẩm Công nghệ-Shop</h2>
     @foreach ($brand_by_id->products as $product)
     <a href="{{ route('product.detail', $product->id) }}">
         <div class="col-sm-4" id="tag_product">

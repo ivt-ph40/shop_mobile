@@ -59,7 +59,7 @@ class OrderController extends Controller
     }
     public function update_order_quantity(Request $request)
     {
-        //update order
+        //update order status
         $data = $request->all();
         $order = Order::find($data['order_id']);
         $order->status_id = $data['order_status'];
@@ -68,18 +68,20 @@ class OrderController extends Controller
         if ($order->status_id == 2) {
             foreach ($data['order_product_id'] as $key1 => $product_id) {
                 $product = Product::find($product_id);
-                $product_qty = $product->quantity;
+                $product_qty_processing = $product->qty_processing;
                 $product_sold = $product->sold;
                 foreach ($data['quantity'] as $key2 => $qty) {
                     if ($key1 == $key2) {
-                        $product_remain = $product_qty - $qty;
-                        $product->quantity = $product_remain;
+                        $product_processing_remain = $product_qty_processing - $qty;
+                        $product->qty_processing = $product_processing_remain;
                         $product->sold = $product_sold + $qty;
                         $product->save();
                     }
                 }
             }
-        } elseif ($order->status_id != 2 && $order->status_id != 3 && $order->status_id != 4) {
+        }
+        elseif ($order->status_id != 2 && $order->status_id != 3 && $order->status_id != 1) {
+        // elseif ($order->status_id == 4) {
             foreach ($data['order_product_id'] as $key1 => $product_id) {
                 $product = Product::find($product_id);
                 $product_qty = $product->quantity;
@@ -95,12 +97,6 @@ class OrderController extends Controller
             }
         }
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         // $content = Cart::content();
@@ -116,22 +112,13 @@ class OrderController extends Controller
             return Redirect()->back()->with('message', 'Vui lòng mua hàng trước khi thanh toán!');
         // }
         } else{
-            $listCategory = Category::where('status', 1)->get();
-            $listBrand = Brand::where('status', 1)->get();
             $listOrderStatus = Order_status::all();
             $provinces = Province::all();
-            return view('orders.order', compact('listCategory', 'listBrand', 'listOrderStatus', 'provinces', 'users', 'districts', 'wards'));
+            return view('orders.order', compact('listOrderStatus', 'provinces', 'users', 'districts', 'wards', 'cart'));
         }
         
 
     }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(CreateOrderRequest $request)
     {
         // $content = Cart::content();
@@ -139,6 +126,7 @@ class OrderController extends Controller
         // dd($cart);
         $data_order_d = array();
         $data_order =array();
+        
         if (Session::get('userId') != null) {
             $data_order['user_id'] = Session::get('userId');
             $data_order['fullname'] = $request->fullname;
@@ -173,55 +161,42 @@ class OrderController extends Controller
             $data_order_d['price'] = $value['price'];
             $orderdetails[$key] = OrderDetail::create($data_order_d);
         }
+        //update quantity in table products
+        $data = array();
+        $data['order_product_id'] = $request->order_product_id_pr;
+        $data['quantity'] = $request->product_qty_pr;
+        // dd($data['quantity']);
+        foreach ($data['order_product_id'] as $key1 => $product_id) {
+            $product = Product::find($product_id);
+            $product_qty = $product->quantity;
+            $product_qty_processing = $product->qty_processing;
+            foreach ($data['quantity'] as $key2 => $qty) {
+                if ($key1 == $key2) {
+                    $product_remain = $product_qty - $qty;
+                    $product->quantity = $product_remain;
+                    $product->qty_processing = $product_qty_processing + $qty;
+                    $product->save();
+                }
+            }
+        }
+
         Mail::to($orders->email)->send(new ShoppingMail($orders, $orderdetails));
         // Cart::destroy();
         Session::forget('cart');
-        $listCategory = Category::where('status', 1)->get();
-        $listBrand = Brand::where('status', 1)->get();
-        // return view('orders.end_order', compact('listCategory', 'listBrand'));
         return Redirect()->route('cart.giohang')->with('message', 'Bạn đã đặt hàng thành công!');
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Order  $order
-     * @return \Illuminate\Http\Response
-     */
     public function show(Order $order)
     {
         //
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Order  $order
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Order $order)
     {
         //
     }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Order  $order
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Order $order)
     {
         //
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Order  $order
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Order $order)
     {
         //

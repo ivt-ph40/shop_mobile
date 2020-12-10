@@ -160,7 +160,7 @@
 					<div class="product-image-wrapper">
 						<div class="single-products">
 							<div class="productinfo text-center">
-								<p>{{$listProductDetail->content}}</p>
+								<p>{!!$listProductDetail->content!!}</p>
 							</div>
 						</div>
 					</div>
@@ -174,7 +174,7 @@
 						<div class="single-products">
 							<div class="productinfo text-center">
 								<img src="images/home/gallery1.jpg" alt="" />
-								<p>{{$listProductDetail->description}}</p>
+								<p>{!!$listProductDetail->description!!}</p>
 							</div>
 						</div>
 					</div>
@@ -191,6 +191,9 @@
 					<form action="" method="post">
 						@csrf
 						<input type="hidden" name="com_product_id" id="inputProduct_id" class="com_product_id" value="{{$listProductDetail->id}}">
+						@if (Session::get('userId'))
+							<input type="hidden" name="userId" id="inputUserId" class="userId" value="{{Session::get('userId')}}">
+						@endif
 						<div id="show_comment"></div>
 						{{-- <div class="comment">
 							<div class="col-md-2">

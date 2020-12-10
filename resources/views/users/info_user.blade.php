@@ -53,10 +53,9 @@
 						<input type="text" name="phone" placeholder="Nhập số điện thoại" value="{{$user->phone}}" disabled="" />
 						<label for="">Địa chỉ nhà</label>
 						<input type="text" name="street" placeholder="Nhập số nhà và tên đường" value="{{$user->street}} - {{$user->ward->name}} - {{$user->district->name}} - {{$user->province->name}}" disabled="" />
-						
-						<button class="btn btn-success"><a id="thoat" href="{{route('home.index')}}">Thoát</a></button>
 
 					</form>
+					<button class="btn btn-success"><a id="thoat" href="{{route('home.index')}}">Thoát</a></button>
 				</div><!--/sign up form-->
 			</div>
 		</div>

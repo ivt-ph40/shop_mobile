@@ -96,6 +96,9 @@
 				</form>
 			</div>
 	</section> <!--/#cart_items-->
+	@if (Session::get('cart') == null)
+			{{''}}
+	@else
 	<section id="do_action">
 			<div class="row">
 				<div class="col-sm-6">
@@ -113,6 +116,7 @@
 				</div>
 			</div>
 	</section><!--/#do_action-->
+	@endif
 	{{-- <script>
 		function updateCart(qty, rowId)
 		{

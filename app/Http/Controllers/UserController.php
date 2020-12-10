@@ -10,6 +10,7 @@ use App\Http\Requests\RegisterUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Requests\UpdateProfileUserRequest;
 use App\Http\Requests\ChangePasswordRequest;
+use App\Http\Requests\UpdateUserAdRequest;
 use App\Province;
 use App\District;
 use App\Ward;
@@ -95,32 +96,56 @@ class UserController extends Controller
             throw new Exception($e->getMessage());
         }
     }
-    public function update(Request $request, $id)
+    public function update(UpdateUserAdRequest $request, $id)
     {
         DB::beginTransaction();
         try {
             $data = array();
-            $data = $request->except('_token', '_method');
-            $data['password'] = md5($request->password);
-            $get_image = $request->file('image');
-            if($get_image){
-                $get_name_image = $get_image->getClientOriginalName();
-                $name_image = current(explode('.', $get_name_image));
-                $new_image = $name_image.rand(0,99).'.'.$get_image->getClientOriginalExtension();
-                $get_image-> move('upload/users', $new_image);
-                $data['image'] = $new_image;
-                $users = User::find($id);
-                $users->update($data);
-                $users->roles()->sync($request->role_ids);
-                DB::commit();
-                return Redirect()->route('users.index')->with('message', 'Bạn đã sửa người thành công!');
+            if ($request->password == null) {
+                $data = $request->except('_token', '_method', 'password');
+                $get_image = $request->file('image');
+                if($get_image){
+                    $get_name_image = $get_image->getClientOriginalName();
+                    $name_image = current(explode('.', $get_name_image));
+                    $new_image = $name_image.rand(0,99).'.'.$get_image->getClientOriginalExtension();
+                    $get_image-> move('upload/users', $new_image);
+                    $data['image'] = $new_image;
+                    $users = User::find($id);
+                    $users->update($data);
+                    $users->roles()->sync($request->role_ids);
+                    DB::commit();
+                    return Redirect()->route('users.index')->with('message', 'Bạn đã sửa người thành công!');
+                } else{
+                    $data['image'] = $request->old_image;
+                    $users = User::find($id);
+                    $users->update($data);
+                    $users->roles()->sync($request->role_ids);
+                    DB::commit();
+                    return Redirect()->route('users.index')->with('message', 'Bạn đã sửa người thành công!');
+                }
             } else{
-                $data['image'] = $request->old_image;
-                $users = User::find($id);
-                $users->update($data);
-                $users->roles()->sync($request->role_ids);
-                DB::commit();
-                return Redirect()->route('users.index')->with('message', 'Bạn đã sửa người thành công!');
+                $data = $request->except('_token', '_method');
+                $data['password'] = md5($request->password);
+                $get_image = $request->file('image');
+                if($get_image){
+                    $get_name_image = $get_image->getClientOriginalName();
+                    $name_image = current(explode('.', $get_name_image));
+                    $new_image = $name_image.rand(0,99).'.'.$get_image->getClientOriginalExtension();
+                    $get_image-> move('upload/users', $new_image);
+                    $data['image'] = $new_image;
+                    $users = User::find($id);
+                    $users->update($data);
+                    $users->roles()->sync($request->role_ids);
+                    DB::commit();
+                    return Redirect()->route('users.index')->with('message', 'Bạn đã sửa người thành công!');
+                } else{
+                    $data['image'] = $request->old_image;
+                    $users = User::find($id);
+                    $users->update($data);
+                    $users->roles()->sync($request->role_ids);
+                    DB::commit();
+                    return Redirect()->route('users.index')->with('message', 'Bạn đã sửa người thành công!');
+                }
             }
         } catch (Exception $e) {
             DB::rollBack();
@@ -143,14 +168,20 @@ class UserController extends Controller
         $email = $request->email;
         $password = md5($request->password);
         // dd($data);
-        $result = User::where('email', $email)->where('password', $password)->first();
-        if ($result) {
-            Session::put('image', $result->image);
-            Session::put('name', $result ->name);
-            Session::put('id', $result ->id);
-            $user = User::find($result ->id)->first();
-            Session::put('userId', $result ->id);
-            return Redirect()->route('home.index');
+        $user = User::where('email', $email)->where('password', $password)->first();
+        if ($user) {
+            Session::put('image', $user->image);
+            Session::put('name', $user ->name);
+            Session::put('id', $user ->id);
+            $roles = $user->with('roles')->find($user->id);
+            $role_id = $roles->roles->pluck('id');
+            Session::put('role_id', $role_id);
+            Session::put('userId', $user ->id);
+            if (count($role_id) > 0) {
+                return Redirect()->route('admin.show_dashboard');
+            } else{
+                return Redirect()->route('home.index');
+            }
         }
         return Redirect()->back()->with('message', 'Mật khẩu hoặc tài khoản không đúng!')->withInput();
     }
@@ -160,6 +191,7 @@ class UserController extends Controller
         Session::put('id', null);
         Session::put('userId', null);
         Session::put('image', null);
+        Session::put('roles', null);
         return Redirect()->route('users.showLoginForm');
     }
     public function showRegistrationForm()
@@ -167,9 +199,7 @@ class UserController extends Controller
         $provinces = Province::all();
         $districts = District::all();
         $wards = Ward::all();
-        $listCategory = Category::where('status', 1)->get();
-        $listBrand = Brand::where('status', 1)->get();
-        return view('users.register', compact('listCategory', 'listBrand', 'provinces', 'districts', 'wards'));
+        return view('users.register', compact('provinces', 'districts', 'wards'));
     }
     public function showDistrict(Request $request)
     {
@@ -207,22 +237,18 @@ class UserController extends Controller
     public function show_profile()
     {
         $this->AuthLogin();
-        $listCategory = Category::where('status', 1)->get();
-        $listBrand = Brand::where('status', 1)->get();
-        return view('users.setting', compact('listCategory', 'listBrand'));
+        return view('users.setting');
     }
     public function manage_profile($id)
     {
         DB::beginTransaction();
         try {
-            $listCategory = Category::where('status', 1)->get();
-            $listBrand = Brand::where('status', 1)->get();
             $user = User::find($id);
             $provinces = Province::all();
             $districts = District::all();
             $wards = Ward::all();
             DB::commit();
-            return view('users.edit_user_profile', compact('user', 'provinces', 'districts', 'wards', 'listCategory', 'listBrand'));
+            return view('users.edit_user_profile', compact('user', 'provinces', 'districts', 'wards'));
         } catch (Exception $e) {
             DB::rollBack();
             
@@ -264,14 +290,12 @@ class UserController extends Controller
     {
         DB::beginTransaction();
         try {
-            $listCategory = Category::where('status', 1)->get();
-            $listBrand = Brand::where('status', 1)->get();
             $user = User::find($id);
             $provinces = Province::all();
             $districts = District::all();
             $wards = Ward::all();
             DB::commit();
-            return view('users.info_user', compact('user', 'provinces', 'districts', 'wards', 'listCategory', 'listBrand'));
+            return view('users.info_user', compact('user', 'provinces', 'districts', 'wards'));
         } catch (Exception $e) {
             DB::rollBack();
             
@@ -280,10 +304,7 @@ class UserController extends Controller
     }
     public function form_change_password($id)
     {
-        
-        $listCategory = Category::where('status', 1)->get();
-        $listBrand = Brand::where('status', 1)->get();
-        return view('users.change_password', compact('listCategory', 'listBrand'));
+        return view('users.change_password');
         
     }
     public function change_password(ChangePasswordRequest $request, $id)

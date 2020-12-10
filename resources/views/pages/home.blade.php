@@ -2,7 +2,7 @@
 @section('content')
 <style>
     h2.title {
-        color: #3f0ffe;
+        color: #054b02;
     }
     #hot{
         width: 80px;
@@ -21,7 +21,7 @@
 <div class="features_items"><!--features_items-->
     <div class="fb-share-button" data-href="http://mobileshop.com/" data-layout="button_count" data-size="large"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fmobileshop.com%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Chia sẻ</a></div>
     <div class="fb-like" data-href="http://mobileshop.com/" data-width="" data-layout="standard" data-action="like" data-size="large" data-share="false"></div>
-    <h2 class="title text-center">Sản phẩm Mobile-Shop</h2>
+    <h2 class="title text-center">Sản phẩm Công nghệ-Shop</h2>
     <div class="col-md-12" style="margin-bottom: 20px">
         <div class="col-md-4">
         <label for="">Sắp xếp theo</label>

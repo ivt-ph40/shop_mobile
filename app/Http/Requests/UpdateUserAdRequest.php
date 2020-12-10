@@ -3,8 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\User;
 
-class RegisterUserRequest extends FormRequest
+class UpdateUserAdRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,18 +24,32 @@ class RegisterUserRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        if ($this->password == null) {
+            return [
             'name'=> 'required|min:3',
             'gender'=> 'required',
             'birthday'=> 'required',
-            'email'=> 'required|email|unique:users',
-            'password'=> 'required|min:8',
+            'email'=> 'required|unique:users,email,'.$this->id,
             'phone'=> 'required',
             'street'=> 'required',
             'province_id'=> 'required',
             'district_id'=> 'required',
             'ward_id'=> 'required'
         ];
+        } else{
+            return [
+                'name'=> 'required|min:3',
+                'gender'=> 'required',
+                'birthday'=> 'required',
+                'email'=> 'required|unique:users,email,'.$this->id,
+                'password'=> 'required|min:8',
+                'phone'=> 'required',
+                'street'=> 'required',
+                'province_id'=> 'required',
+                'district_id'=> 'required',
+                'ward_id'=> 'required'
+            ];
+        }
     }
     public function messages()
     {
@@ -44,15 +59,14 @@ class RegisterUserRequest extends FormRequest
             'gender.required'=> 'Không được bỏ trống giới tính',
             'birthday.required'=> 'Không được bỏ trống ngày sinh',
             'email.required'=> 'Không được bỏ trống email',
-            'email.email'=> 'Phải có ký tự @ theo quy định',
             'email.unique'=> 'Email này đã được đăng ký',
             'password.required'=> 'Không được bỏ trống password',
-            'password.min'=> 'Không được ngắn hơn 8 ký tự',
+            'password.min'=> 'Không được không được ngắn hơn 8 ký tự',
             'phone.required'=> 'Không được bỏ trống số điện thoại',
             'street.required'=> 'Không được bỏ trống tên đường',
             'province_id.required'=> 'Không được bỏ trống tỉnh',
             'district_id.required'=> 'Không được bỏ trống huyện',
-            'ward_id.required'=> 'Không được bỏ trống xã/phường'
+            'ward_id.required'=> 'Không được bỏ trống xã'
         ];
     }
 }

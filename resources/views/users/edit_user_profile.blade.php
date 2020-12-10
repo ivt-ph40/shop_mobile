@@ -37,7 +37,7 @@
 						<input type="hidden" name="old_image" class="form-control" value="{{$user->image}}" />
 						<input type="file" name="image" class="form-control"/>
 						<label for="">Họ tên</label>
-						<input type="text" name="name" placeholder="Họ và tên" value="{{$user->name}}" />
+						<input type="text" name="name" placeholder="Họ và tên" value="@if(old('name')){{old('name')}}@else{{$user->name}}@endif" />
 						<p style="color: red">{{ $errors->first('name') }}</p>
 						<label for="">Giới tính</label>
 						<select name="gender" id="select1" class="form-control">
@@ -52,7 +52,13 @@
 						</select>
 						<p style="color: red">{{ $errors->first('gender') }}</p>
 						<label for="">Địa chỉ email</label>
-						<input type="email" name="email" placeholder="Nhập email" value="{{$user->email}}" />
+						<input type="email" name="email" placeholder="Nhập email" value="
+						@if (old('email'))
+							{{old('email')}}
+						@else
+							{{$user->email}}
+						@endif
+						" />
 						<p style="color: red">{{ $errors->first('email') }}</p>
 						{{-- <label for="">Mật khẩu</label>
 						<input type="password" name="password" placeholder="Nhập mật khẩu" value="{{$user->password}}" /> --}}
@@ -61,10 +67,10 @@
 						<input type="date" name="birthday" placeholder="Nhập ngày sinh" value="{{$user->birthday}}" />
 						<p style="color: red">{{ $errors->first('birthday') }}</p>
 						<label for="">Số điện thoại</label>
-						<input type="text" name="phone" placeholder="Nhập số điện thoại" value="{{$user->phone}}" />
+						<input type="text" name="phone" placeholder="Nhập số điện thoại" value="@if (old('phone')){{old('phone')}}@else{{$user->phone}}@endif" />
 						<p style="color: red">{{ $errors->first('phone') }}</p>
 						<label for="">Địa chỉ nhà</label>
-						<input type="text" name="street" placeholder="Nhập số nhà và tên đường" value="{{$user->street}}" />
+						<input type="text" name="street" placeholder="Nhập số nhà và tên đường" value="@if (old('street')){{old('street')}}@else{{$user->street}}@endif" />
 						<p style="color: red">{{ $errors->first('street') }}</p>
 						<label for="">Tỉnh/thành phố</label>
 						<select name="province_id" id="inputProvince_id" class="form-control">
@@ -74,7 +80,13 @@
 								@if ($user->province_id == $province->id)
 									{{'selected'}}
 								@endif
-								 value="{{ $province->id }}">{{$province->name}}</option>
+								 value="
+								 @if (old('province_id'))
+									{{old('province_id')}}
+								@else
+									{{ $province->id }}
+								@endif
+								 ">{{$province->name}}</option>
 							@endforeach
 						</select>
 						<p style="color: red">{{ $errors->first('province_id') }}</p>
@@ -107,17 +119,9 @@
 								<button type="submit" class="btn btn-primary">Cập nhật</button>
 							</div>
 							<div class="col-md-6">
-								<button class="btn btn-success"><a id="thoat" href="{{route('home.index')}}">Thoát</a></button>
+								<button class="btn btn-success"><a id="thoat" href="{{route('users.show_profile')}}">Thoát</a></button>
 							</div>
 						</div>
-						{{-- <div class="g-recaptcha" data-sitekey="6LegCu4ZAAAAAFJJ3Cc2Bkm1xk-7gFk9wCfzVE-9"></div>
-						<br/>
-						@if($errors->has('g-recaptcha-response'))
-						<span class="invalid-feedback" style="display:block">
-							<strong>{{$errors->first('g-recaptcha-response')}}</strong>
-						</span>
-						@endif --}}
-
 					</form>
 				</div><!--/sign up form-->
 			</div>

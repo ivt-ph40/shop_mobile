@@ -10,11 +10,7 @@
       <table class="table table-striped b-t b-light">
         <thead>
           <tr>
-            <th style="width:20px;">
-              <label class="i-checks m-b-none">
-                <input type="checkbox"><i></i>
-              </label>
-            </th>
+            
             <th>Tên tài khoản</th>
             <th>Họ tên</th>
             <th>Địa chỉ</th>
@@ -23,7 +19,7 @@
         <tbody>
           
             <tr>
-              <td><label class="i-checks m-b-none"><input type="checkbox" name="post[]"><i></i></label></td>
+              
               <td>
                 @if ($orders->user == null)
                   {{null}}
@@ -53,12 +49,8 @@
       <table class="table table-striped b-t b-light">
         <thead>
           <tr>
-            <th style="width:20px;">
-              <label class="i-checks m-b-none">
-                <input type="checkbox"><i></i>
-              </label>
-            </th>
-            <th>id</th>
+            <th>STT</th>
+            {{-- <th>id</th> --}}
             <th>Mã đơn hàng</th>
             <th>Số lượng tồn kho</th>
             <th>Tên sản phẩm</th>
@@ -68,10 +60,16 @@
           </tr>
         </thead>
         <tbody>
+          @php
+            $i = 0;
+          @endphp
           @foreach ($orderDetail as $o_det)
+          @php
+            $i++;
+          @endphp
             <tr>
-              <td><label class="i-checks m-b-none"><input type="checkbox" name="post[]"><i></i></label></td>
-              <td>{{$o_det->id}}</td>
+              <td>{{$i}}</td>
+              {{-- <td>{{$o_det->id}}</td> --}}
               <td>{{$o_det->order_id}}</td>
               <td>{{$o_det->product_qty}}</td>
               <td>{{ $o_det->name }}</td>
@@ -79,8 +77,8 @@
                 <input style="width: 50px" type="text" disabled="" name="product_qty" class="product_qty" value="{{ $o_det->quantity }}" onlyread>
                 <input type="hidden" name="order_product_id" class="order_product_id" value="{{$o_det->product_id}}">
               </td>
-              <td>{{ $o_det->price }}</td>
-              <td>{{ $o_det->price*$o_det->quantity }}</td>
+              <td>$ {{ number_format($o_det->price) }}</td>
+              <td>$ {{ number_format($o_det->price*$o_det->quantity) }}</td>
           </tr>
           @endforeach
           <tr>
@@ -106,24 +104,7 @@
         </select>
       </form>
     </div>
-    <footer class="panel-footer">
-      <div class="row">
-        
-        <div class="col-sm-5 text-center">
-          <small class="text-muted inline m-t-sm m-b-sm">showing 20-30 of 50 items</small>
-        </div>
-        <div class="col-sm-7 text-right text-center-xs">                
-          <ul class="pagination pagination-sm m-t-none m-b-none">
-            <li><a href=""><i class="fa fa-chevron-left"></i></a></li>
-            <li><a href="">1</a></li>
-            <li><a href="">2</a></li>
-            <li><a href="">3</a></li>
-            <li><a href="">4</a></li>
-            <li><a href=""><i class="fa fa-chevron-right"></i></a></li>
-          </ul>
-        </div>
-      </div>
-    </footer>
+    
   </div>
 </div>
 @endsection
